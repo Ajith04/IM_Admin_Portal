@@ -1,0 +1,139 @@
+<div class="card flex justify-content-center m-5">
+    <p-fieldset [toggleable]="true">
+        <ng-template pTemplate="header">
+            <div class="flex align-items-center gap-2 px-2">
+                <p-avatar 
+                    image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" 
+                    shape="circle" />
+                <span class="font-bold">Edit</span>
+            </div>
+        </ng-template>
+        
+        <div class="flex gap-5">
+        <div>
+            <div class="card flex flex-column gap-2 mb-3">
+                <label for="courseId" class="font-semibold w-6rem">Course ID</label>
+                <input 
+                    id="courseId"
+                    type="text"
+                    pInputText 
+                    [disabled]="true" 
+                    />
+            </div>
+
+            <div class="card flex flex-column gap-2 mb-3">
+                <label for="courseId" class="font-semibold w-6rem">Level</label>
+                <input 
+                    id="courseId"
+                    type="text"
+                    pInputText 
+                    [disabled]="true" 
+                    />
+            </div>
+
+            <div class="card flex flex-column gap-2 mb-5">
+                <label for="courseId" class="font-semibold">Created Date</label>
+                <input 
+                    id="courseId"
+                    type="text"
+                    pInputText 
+                    [disabled]="true" 
+                    />
+            </div>
+            <div class="card flex justify-content-center">
+                <div class="card flex justify-content-center flex-column align-items-center">
+                    <label for="" class="font-semibold text-center">Edit mode is Off</label>
+                    <p-inputSwitch [(ngModel)]="checked" class="mt-1"/>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <div class="card flex flex-column gap-2 mb-3">
+                <label for="courseId" class="font-semibold w-6rem">Duration</label>
+                <input 
+                    id="courseId"
+                    type="text"
+                    pInputText 
+                    [disabled]="true" 
+                    />
+            </div>
+
+            <div class="card flex flex-column gap-2 mb-3">
+                <label for="courseId" class="font-semibold w-6rem">Course Fee</label>
+                <input 
+                    id="courseId"
+                    type="text"
+                    pInputText 
+                    [disabled]="true" 
+                    />
+            </div>
+
+            <div class="card flex flex-column gap-2 mb-5" [ngStyle]="{visibility:'hidden'}">
+                <label for="courseId" class="font-semibold w-6rem">Course Fee</label>
+                <input 
+                    id="courseId"
+                    type="text"
+                    pInputText 
+                    [disabled]="true" 
+                    />
+            </div>
+            
+
+            <div>
+                <p-button label="Update" [raised]="true" severity="warning" />
+            </div>
+        </div>
+
+        <div>
+            <p-editor [style]="{ height: '280px'}" class="pointer-events-none"/>
+        </div>
+    </div>
+  
+    </p-fieldset>
+</div>
+
+
+
+<div class="card flex justify-content-center m-5">
+    
+    <p-fieldset legend="Assign Instructors" [toggleable]="true">
+        <h3 class="text-center">Drag and drop to assign</h3>
+        <div class="card flex flex-wrap gap-3">
+            <div class="p-2 border-1 surface-border border-round w-35rem">
+                <p class="text-center surface-border border-bottom-1 font-semibold">Instructors</p>
+                <div class="flex gap-2 p-0 m-0 flex-wrap">
+                    <div 
+                        *ngFor="let instructor of allInstructors" 
+                        class="p-2 border-round shadow-1 flex flex-column justify-content-center align-content-center"
+                        pDraggable 
+                        (onDragStart)="dragStart(instructor)" 
+                        (onDragEnd)="dragEnd()"
+                        >
+                            <img [src]="'data:image/jpeg;base64,'+ instructor.avatar" alt="" width="100">
+                            <h3 class="text-center">{{instructor.instructorName}}</h3>
+                </div>
+                </div>
+            </div>
+            <div class="p-2 border-1 surface-border border-round w-15rem" pDroppable (onDrop)="drop()">
+                <p class="text-center surface-border border-bottom-1 font-semibold">Drop Zone</p>
+                <ul class="list-none flex flex-column gap-2 p-0 m-0" *ngIf="selectedProducts" >
+                    <li *ngFor="let instructor of selectedProducts" class="p-2 border-round shadow-1">
+                        {{instructor.instructorName}}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+    </p-fieldset>
+</div>
+
+
+<div class="card flex justify-content-center m-5">
+    <p-fieldset legend="Delete" [toggleable]="true" class="w-full">
+        <div class="flex justify-content-around">
+       <h3>Do you want to delete this Course level?</h3>
+       <p-button label="Yes" severity="danger" />
+    </div>
+    </p-fieldset>
+</div>

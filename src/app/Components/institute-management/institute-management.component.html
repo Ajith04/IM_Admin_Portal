@@ -1,0 +1,74 @@
+<div class="flex m-5">
+    <div>
+        <div class="card flex justify-content-center">
+            <p-toast />
+            <p-panelMenu [model]="items" styleClass="w-full md:w-20rem" />
+        </div>
+    </div>
+    <div>
+        <router-outlet></router-outlet>
+    </div>
+</div>
+
+
+<div class="card flex justify-content-center">
+    <p-dialog header="Add Instructor" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }">
+        <form [formGroup]="addInstructor" (ngSubmit)="sendInstructor()">
+        <div class="flex align-items-center gap-3 mb-3 mt-1">
+            <label for="username" class="font-semibold w-6rem">Name</label>
+            <input pInputText id="username" class="flex-auto" autocomplete="off" formControlName="name"/>
+        </div>
+        <div class="flex align-items-center gap-3 mb-3">
+            
+                <label for="username" class="font-semibold w-6rem">Description</label>
+                <textarea 
+                    rows="5"
+                    cols="27"
+                    pInputTextarea 
+                    [autoResize]="true"
+                    formControlName="description"
+                    >
+                </textarea>
+            
+        </div>
+
+        <div class="flex align-items-center gap-3 mb-3 mt-1">
+            <label for="username" class="font-semibold w-6rem">Avatar</label>
+            <p-fileUpload 
+            mode="basic" 
+            chooseLabel="Upload" 
+            chooseIcon="pi pi-upload"
+            accept="image/*" 
+            maxFileSize="1000000" 
+            (onSelect)="onSelect($event)"
+            />
+        </div>
+
+        <div class="flex align-items-center gap-3 mb-3 mt-1">
+            <label for="username" class="font-semibold w-6rem">Date of Join</label>
+            <p-calendar 
+            [showIcon]="true" 
+            [showOnFocus]="false" 
+            inputId="buttondisplay"
+            formControlName="dateOfJoin"
+            />
+        </div>
+
+        <div class="flex align-items-center gap-3 mb-3 mt-1">
+            <label for="username" class="font-semibold w-6rem">Mobile</label>
+            <input pInputText id="username" class="flex-auto" autocomplete="off" formControlName="mobile"/>
+        </div>
+
+        <div class="flex align-items-center gap-3 mb-3 mt-1">
+            <label for="username" class="font-semibold w-6rem">Email</label>
+            <input pInputText id="username" class="flex-auto" autocomplete="off" formControlName="email"/>
+        </div>
+        
+        <div class="flex justify-content-end gap-2">
+            <p-button label="Cancel" severity="secondary" (onClick)="visible = false" />
+            <p-button label="Add" type="submit"/>
+        </div>
+    </form>
+    </p-dialog>
+</div>
+
