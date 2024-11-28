@@ -39,12 +39,25 @@ getInstructorForCourse(){
   return this.http.get<InstructorForCourse[]>(this.url + '/get-instructor-for-course');
 }
 
+getAllCourseNames(){
+  return this.http.get<getCourseNames[]>(this.url + '/get-all-course-names');
+}
+
+}
+
+export interface getCourseNames{
+  name : string;
 }
 
 export interface InstructorForCourse{
   instructorId: number;
   instructorName: string;
   avatar: File[];
+  instructorCourseNameResponses: courseNames[]
+}
+
+export interface courseNames{
+  courseName: string;
 }
 
 export interface AllInstructors{

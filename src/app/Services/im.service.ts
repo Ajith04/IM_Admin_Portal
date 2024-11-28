@@ -18,7 +18,15 @@ export class IMService {
     return this.http.get<Instructor[]>(this.url + '/get-all-instructors');
   }
 
+  sendCourseName(data: CourseName){
+    return this.http.post<CourseName>(this.url + '/add-course-name', data);
+  }
+
  
+}
+
+export interface CourseName{
+  name: string;
 }
 
 

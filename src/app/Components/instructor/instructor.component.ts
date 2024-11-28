@@ -6,11 +6,12 @@ import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { IMService } from '../../Services/im.service';
 import { Instructor } from '../../Services/im.service';
+import { ImageModule } from 'primeng/image';
 
 @Component({
   selector: 'app-instructor',
   standalone: true,
-  imports: [TableModule, TagModule, RatingModule, ButtonModule, CommonModule],
+  imports: [TableModule, TagModule, RatingModule, ButtonModule, CommonModule, ImageModule],
   templateUrl: './instructor.component.html',
   styleUrl: './instructor.component.css'
 })

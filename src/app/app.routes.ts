@@ -11,6 +11,7 @@ import { ViewCourseComponent } from './Components/view-course/view-course.compon
 import { EditCourseComponent } from './Components/edit-course/edit-course.component';
 import { Component } from '@angular/core';
 import { InstructorComponent } from './Components/instructor/instructor.component';
+import { AddCourseNameComponent } from './Components/add-course-name/add-course-name.component';
 
 export const routes: Routes = [
     {path:'login', component:LoginComponent},
@@ -27,7 +28,9 @@ export const routes: Routes = [
             {path:'payments', component:PaymentsComponent},
             {path:'institute-management', component:InstituteManagementComponent,
                 children:[
-                    {path:'instructor', component:InstructorComponent}
+                    {path:'instructor', component:InstructorComponent},
+                    {path:'course-name', component:AddCourseNameComponent}
+
                 ]
             },
             {path:'study-materials', component:StudyMaterialsComponent},

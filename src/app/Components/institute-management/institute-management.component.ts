@@ -15,6 +15,8 @@ import { CalendarModule } from 'primeng/calendar';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IMService } from '../../Services/im.service';
 import { Router } from '@angular/router';
+import { CourseService, getCourseNames } from '../../Services/course.service';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 
 
@@ -23,20 +25,23 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-institute-management',
   standalone: true,
-  imports: [CardModule, ButtonModule, SpeedDialModule, TooltipModule, PanelMenuModule, ToastModule, DialogModule, InputTextModule, InputTextareaModule, FileUploadModule, HttpClientModule, CalendarModule, ReactiveFormsModule],
+  imports: [CardModule, ButtonModule, SpeedDialModule, TooltipModule, PanelMenuModule, ToastModule, DialogModule, InputTextModule, InputTextareaModule, FileUploadModule, HttpClientModule, CalendarModule, ReactiveFormsModule, MultiSelectModule],
   providers: [MessageService, IMService],
   templateUrl: './institute-management.component.html',
   styleUrl: './institute-management.component.css'
 })
 export class InstituteManagementComponent {
 
+    allCourseNames: getCourseNames[] = [];
+
     addInstructor: FormGroup;
 
-    constructor(private fb: FormBuilder, private imService: IMService, private messageService: MessageService, private router: Router){
+    constructor(private fb: FormBuilder, private imService: IMService, private messageService: MessageService, private router: Router, private courseService: CourseService){
         this.addInstructor = this.fb.group({
             name:['', Validators.required],
             description:['', Validators.required],
             avatar:[null, Validators.required],
+            courseNames: [[], Validators.required],
             dateOfJoin:['', Validators.required],
             mobile:['', Validators.required],
             email:['', Validators.required],
@@ -56,35 +61,43 @@ export class InstituteManagementComponent {
                 icon: 'pi pi-plus',
                 items: [
                     {
-                        label: 'New Course Category',
+                        label: 'Course Name',
+                        icon: 'pi pi-at',
+                        command: () => {
+                            this.router.navigate(['/admin/institute-management/course-name']);
+                        }
+                    },
+                    {
+                        label: 'Course Category',
                         icon: 'pi pi-bars',
                         command: () => {
                             
                         }
                     },
                     {
-                        label: 'New Course Level',
+                        label: 'Course Level',
                         icon: 'pi pi-file-o',
                         command: () => {
                             
                         }
                     },
                     {
-                        label: 'New Batch',
+                        label: 'Batch',
                         icon: 'pi pi-clone',
                         command: () => {
                             
                         }
                     },
                     {
-                        label: 'New Instructor',
+                        label: 'Instructor',
                         icon: 'pi pi-user',
                         command: () => {
                             this.visible = true;
+                            this.courseService.getAllCourseNames().subscribe({next:(data: getCourseNames[]) => {this.allCourseNames = data}});
                         }
                     },
                     {
-                        label: 'New Expense',
+                        label: 'Expense',
                         icon: 'pi pi-wallet',
                         command: () => {
                             
@@ -150,6 +163,11 @@ export class InstituteManagementComponent {
 
             formData.append('instructorName', this.addInstructor.value.name);
             formData.append('description', this.addInstructor.value.description);
+
+            this.addInstructor.value.courseNames.forEach((courseName:any) => {
+                formData.append('courseNames', courseName.name);
+            });
+            
             formData.append('dateOfJoin', formattedDate);
             formData.append('mobile', this.addInstructor.value.mobile);
             formData.append('email', this.addInstructor.value.email);

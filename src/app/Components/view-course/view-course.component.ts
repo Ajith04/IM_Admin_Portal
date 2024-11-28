@@ -25,14 +25,15 @@ import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
-import { AllCourseLevel, AllMainCourse, Category, CourseService, Instructor, Level, MainCourse, MainCourseName } from '../../Services/course.service';
+import { AllCourseLevel, AllMainCourse, Category, CourseService, getCourseNames, Instructor, Level, MainCourse, MainCourseName } from '../../Services/course.service';
 import { MessageService, ConfirmationService, MenuItem } from 'primeng/api';
 import { Router } from '@angular/router';
+import { ImageModule } from 'primeng/image';
 
 @Component({
   selector: 'app-view-course',
   standalone: true,
-  imports: [TableModule, TagModule, ToastModule, RatingModule, ButtonModule, HttpClientModule, DialogModule, RippleModule, ToolbarModule, ConfirmDialogModule, InputTextModule, InputTextareaModule, CommonModule, FileUploadModule, DropdownModule, RadioButtonModule, RatingModule, FormsModule, InputNumberModule, SplitButtonModule, IconFieldModule, InputIconModule, SkeletonModule, CalendarModule, MultiSelectModule, ReactiveFormsModule, FloatLabelModule, EditorModule],
+  imports: [TableModule, TagModule, ToastModule, RatingModule, ButtonModule, HttpClientModule, DialogModule, RippleModule, ToolbarModule, ConfirmDialogModule, InputTextModule, InputTextareaModule, CommonModule, FileUploadModule, DropdownModule, RadioButtonModule, RatingModule, FormsModule, InputNumberModule, SplitButtonModule, IconFieldModule, InputIconModule, SkeletonModule, CalendarModule, MultiSelectModule, ReactiveFormsModule, FloatLabelModule, EditorModule, ImageModule],
   providers: [CourseService, MessageService, ConfirmationService],
   templateUrl: './view-course.component.html',
   styleUrl: './view-course.component.css',
@@ -59,6 +60,7 @@ export class ViewCourseComponent implements OnInit{
   allCourses: AllMainCourse[] = [];
   allCourseLevels: AllCourseLevel[] = [];
   instructors: Instructor[] = [];
+  allCourseNames: getCourseNames[] = [];
 
 
 
@@ -136,6 +138,7 @@ save(severity: string) {
 
 addCourse() {
   this.addMainCoursePopup = true;
+  this.getAllCourseNames();
   this.addMainCourse.reset();
 }
 
@@ -162,8 +165,12 @@ addLevel() {
       if (this.addMainCourse.valid) {
 
         const formData = new FormData();
+
+        var selectedCourseName = this.addMainCourse.get('courseName')?.value;
+        var courseName = selectedCourseName ? selectedCourseName.name : '';
+
     
-        formData.append('courseName', this.addMainCourse.value.courseName);
+        formData.append('courseName', courseName);
     
         this.addMainCourse.value.categories.forEach((category: any) => {
           formData.append('categories', category.categoryName);
@@ -226,6 +233,10 @@ addLevel() {
         });
         
       }
+    }
+
+    getAllCourseNames(){
+      this.courseService.getAllCourseNames().subscribe({next: (data: getCourseNames[]) => {this.allCourseNames = data}});
     }
 
   

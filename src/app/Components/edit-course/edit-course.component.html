@@ -98,20 +98,27 @@
 <div class="card flex justify-content-center m-5">
     
     <p-fieldset legend="Assign Instructors" [toggleable]="true">
-        <h3 class="text-center">Drag and drop to assign</h3>
+        <h3 class="text-center mt-0 mb-2">Drag and drop to assign</h3>
         <div class="card flex flex-wrap gap-3">
             <div class="p-2 border-1 surface-border border-round w-35rem">
                 <p class="text-center surface-border border-bottom-1 font-semibold">Instructors</p>
                 <div class="flex gap-2 p-0 m-0 flex-wrap">
                     <div 
                         *ngFor="let instructor of allInstructors" 
-                        class="p-2 border-round shadow-1 flex flex-column justify-content-center align-content-center"
+                        class="p-2 border-round shadow-1 flex flex-column justify-content-center align-items-center"
                         pDraggable 
                         (onDragStart)="dragStart(instructor)" 
                         (onDragEnd)="dragEnd()"
                         >
                             <img [src]="'data:image/jpeg;base64,'+ instructor.avatar" alt="" width="100">
                             <h3 class="text-center">{{instructor.instructorName}}</h3>
+                            <div class="flex flex-wrap">
+                                <p-tag *ngFor="let singleCourse of instructor.instructorCourseNameResponses"
+                                [value]="singleCourse.courseName"
+                                class="mx-1">
+                                
+                                </p-tag>
+                            </div>
                 </div>
                 </div>
             </div>

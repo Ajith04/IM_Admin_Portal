@@ -12,7 +12,7 @@
 
 
 <div class="card flex justify-content-center">
-    <p-dialog header="Add Instructor" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }">
+    <p-dialog header="Add Instructor" [modal]="true" [(visible)]="visible" [style]="{ width: '30rem' }">
         <form [formGroup]="addInstructor" (ngSubmit)="sendInstructor()">
         <div class="flex align-items-center gap-3 mb-3 mt-1">
             <label for="username" class="font-semibold w-6rem">Name</label>
@@ -42,6 +42,15 @@
             maxFileSize="1000000" 
             (onSelect)="onSelect($event)"
             />
+        </div>
+
+        <div class="flex align-items-center gap-3 mb-3 mt-1">
+            <label for="username" class="font-semibold w-6rem">Known Courses</label>
+            <p-multiSelect 
+            [options]="allCourseNames" 
+            formControlName="courseNames"
+            optionLabel="name" 
+            placeholder="Courses He/She can teach"/>
         </div>
 
         <div class="flex align-items-center gap-3 mb-3 mt-1">

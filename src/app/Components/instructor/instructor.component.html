@@ -15,13 +15,15 @@
                 <th>Date of Join</th>
                 <th>Mobile</th>
                 <th>Email</th>
+                <th>Courses</th>
+                <th>Actions</th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-allInstructors>
             <tr>
                 <td>{{allInstructors.instructorName}}</td>
                 <td>{{allInstructors.description}}</td>
-                <td><img [src]="'data:image/jpeg;base64,' + allInstructors.avatar" width="60" class="" /></td>
+                <td><p-image [src]="'data:image/jpeg;base64,' + allInstructors.avatar" width="60" class="" [preview]="true"/></td>
                 <td><p-rating [readonly]="true" [cancel]="false" /></td>
                 <td>{{allInstructors.dateOfJoin | date: 'dd/MMM/yyyy'}}</td>
                 <td>{{allInstructors.mobile}}</td>

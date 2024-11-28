@@ -10,6 +10,7 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
 import { DragDropModule } from 'primeng/dragdrop';
 import { CourseService, InstructorForCourse } from '../../Services/course.service';
 import { InputSwitchModule } from 'primeng/inputswitch';
+import { TagModule } from 'primeng/tag';
 
 
 
@@ -17,7 +18,7 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 @Component({
   selector: 'app-edit-course',
   standalone: true,
-  imports: [FieldsetModule, AvatarModule, FormsModule, InputTextModule, EditorModule, NgStyle, ButtonModule, DragDropModule, CommonModule, FormsModule, ToggleButtonModule, InputSwitchModule],
+  imports: [FieldsetModule, AvatarModule, FormsModule, InputTextModule, EditorModule, NgStyle, ButtonModule, DragDropModule, CommonModule, FormsModule, ToggleButtonModule, InputSwitchModule, TagModule],
   templateUrl: './edit-course.component.html',
   styleUrl: './edit-course.component.css'
 })

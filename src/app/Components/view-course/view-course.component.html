@@ -21,8 +21,15 @@
       <form [formGroup]="addMainCourse" (ngSubmit)="sendMainCourse()">
 
         <div class="flex align-items-center gap-3 mb-3 mt-1">
-          <label for="courseName" class="font-semibold w-6rem">Course Name</label>
-          <input pInputText id="courseName" class="flex-auto" autocomplete="off" formControlName="courseName"/>
+          <label for="mainCourseName" class="font-semibold w-6rem">Course Name</label>
+        <p-dropdown 
+        formControlName="courseName" 
+        [options]="allCourseNames"
+        optionLabel="name"
+        placeholder="Select a Course Name"
+        [showClear]="true"
+        inputId="courseName"
+        class="mt-1"/>
         </div>
         
         <div class="flex align-items-center gap-3 mb-5">
@@ -189,7 +196,7 @@
               [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
             />
           </td>
-          <td style="width: 10rem;"><img [src]="'data:image/jpeg;base64,' + allCourses.thumbnail" alt="" width="50"></td>
+          <td style="width: 10rem;"><p-image [src]="'data:image/jpeg;base64,' + allCourses.thumbnail" alt="" width="50" [preview]="true"/></td>
           <td><h3>{{allCourses.courseName}}</h3>
             <span *ngIf=" allCourses?.categories && allCourses.categories.length > 0;" class="flex mt-3">
               <ng-container *ngFor="let category of allCourses.categories">
