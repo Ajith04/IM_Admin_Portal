@@ -4,13 +4,17 @@ import { AvatarModule } from 'primeng/avatar';
 import { FormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { EditorModule } from 'primeng/editor';
-import { CommonModule, NgStyle } from '@angular/common';
+import { CommonModule, NgClass, NgStyle } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { DragDropModule } from 'primeng/dragdrop';
-import { CourseService, InstructorForCourse } from '../../Services/course.service';
+import { CourseService, InstructorForCourse, singleCourseLevel, updateCourseData, AssignInstructor, getInsructor } from '../../Services/course.service';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { TagModule } from 'primeng/tag';
+import { ActivatedRoute } from '@angular/router';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 
 
@@ -18,56 +22,135 @@ import { TagModule } from 'primeng/tag';
 @Component({
   selector: 'app-edit-course',
   standalone: true,
-  imports: [FieldsetModule, AvatarModule, FormsModule, InputTextModule, EditorModule, NgStyle, ButtonModule, DragDropModule, CommonModule, FormsModule, ToggleButtonModule, InputSwitchModule, TagModule],
+  imports: [FieldsetModule, AvatarModule, FormsModule, InputTextModule, EditorModule, NgStyle, ButtonModule, DragDropModule, CommonModule, FormsModule, ToggleButtonModule, InputSwitchModule, TagModule, ToastModule, ConfirmDialogModule],
+  providers: [ConfirmationService, MessageService],
   templateUrl: './edit-course.component.html',
   styleUrl: './edit-course.component.css'
 })
 export class EditCourseComponent implements OnInit{
 
-    constructor(private courseService: CourseService){
+    constructor(private courseService: CourseService, private route: ActivatedRoute, private messageService: MessageService, private confirmationService: ConfirmationService){
 
     }
 
+    levelId:string = '';
+
+    isDisabled:boolean = true;
+    editorClass:string = 'pointer-events-none';
+    editBtnText: string = 'Edit mode is Off';
+
+    formData: updateCourseData = {
+        duration:'',
+        courseFee:0,
+        description: ''          
+    }
+
+    assignInstructor: AssignInstructor = {
+     courseId:'',
+     instructorId:0
+    }
+
+  
   checked: boolean = false;
 
   allInstructors: InstructorForCourse[] = [];
+  selectedInstructor: getInsructor[] = [];
+  draggedInstructor: InstructorForCourse | undefined | null;
 
-  selectedProducts: InstructorForCourse[] = [];
+  singleCourseLevel: singleCourseLevel |undefined;
 
-  draggedProduct: InstructorForCourse | undefined | null;
 
   ngOnInit() {
-      this.selectedProducts = [];
+
+    this.route.paramMap.subscribe((params) => {
+        const id = params.get('id');
+        this.levelId = id ? id.toString() : '';
+    })
+      this.selectedInstructor = [];
+
+      this.getSingleCourseLevel();
+
 
       this.courseService.getInstructorForCourse().subscribe({next:(data: InstructorForCourse[]) => {this.allInstructors = data;}});
+      this.getAssignedInstructor();
+      
+      
 
   }
 
-  dragStart(product: InstructorForCourse) {
-      this.draggedProduct = product;
+  
+  
+
+  dragStart(instructor: InstructorForCourse) {
+      this.draggedInstructor = instructor;
   }
 
-  drop() {
-      if (this.draggedProduct) {
-          let draggedProductIndex = this.findIndex(this.draggedProduct);
-          this.selectedProducts = [...(this.selectedProducts as InstructorForCourse[]), this.draggedProduct];
-          this.allInstructors = this.allInstructors?.filter((val, i) => i != draggedProductIndex);
-          this.draggedProduct = null;
-      }
-  }
-
-  dragEnd() {
-      this.draggedProduct = null;
-  }
-
-  findIndex(product: InstructorForCourse) {
-      let index = -1;
-      for (let i = 0; i < (this.allInstructors as InstructorForCourse[]).length; i++) {
-          if (product.instructorId === (this.allInstructors as InstructorForCourse[])[i].instructorId) {
-              index = i;
-              break;
+  drop(event: Event) {
+        this.confirmationService.confirm({
+          target: event.target as EventTarget,
+          message: 'Are you sure that you want to proceed?',
+          header: 'Confirmation',
+          icon: 'pi pi-exclamation-triangle',
+          acceptIcon:"none",
+          rejectIcon:"none",
+          rejectButtonStyleClass:"p-button-text",
+          accept: () => {
+            this.assignInstructor.courseId = this.levelId;
+            this.assignInstructor.instructorId = this.draggedInstructor?.instructorId;
+   
+            this.courseService.instructorToCourse(this.assignInstructor).subscribe({
+             next: () => {
+               this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Instructor Assigned!' });
+               this.getAssignedInstructor();
+             },
+             error: () => {
+               this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to assign Instructor.' });
+             }
+           });
+          },
+          reject: () => {
+              
           }
+      });
       }
-      return index;
+
+
+  getSingleCourseLevel(){
+    this.courseService.getSingleCourseLevel(this.levelId).subscribe({next:(data: singleCourseLevel) => {this.singleCourseLevel = data;
+        this.formData.duration = this.singleCourseLevel?.duration;
+        this.formData.courseFee = this.singleCourseLevel?.courseFee;
+        this.formData.description = this.singleCourseLevel?.description;
+    }});
   }
+
+  
+
+  editBtn(){
+    this.isDisabled = this.isDisabled === true ? false : true;
+    this.editBtnText = this.editBtnText === 'Edit mode is Off' ? 'Edit mode is On' : 'Edit mode is Off';
+    this.editorClass = this.editorClass === 'pointer-events-none' ? '' : 'pointer-events-none';
+    
+  }
+
+  updateSingleCourse(){
+    this.courseService.updateSingleCourse(this.levelId, this.formData).subscribe({
+        next: () => {
+          this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Course Level Updated.' });
+          this.getSingleCourseLevel();
+          this.checked = false;
+          this.editBtn();
+        },
+        error: () => {
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to Update Course Level.' });
+        }
+      });
+  }
+
+  getAssignedInstructor(){
+    this.courseService.getAssignedInstructor(this.levelId).subscribe({next:(data: getInsructor[]) => {this.selectedInstructor = data;}});
+   
+
+  }
+
+  
 }

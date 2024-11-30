@@ -43,6 +43,52 @@ getAllCourseNames(){
   return this.http.get<getCourseNames[]>(this.url + '/get-all-course-names');
 }
 
+getSingleCourseLevel(id: string){
+  return this.http.get<singleCourseLevel>(this.url + `/get-single-course-level/${id}`)
+}
+
+updateSingleCourse(levelId: string, formData:updateCourseData){
+  return this.http.patch<updateCourseData>(this.url + `/update-single-course/${levelId}`, formData);
+}
+
+instructorToCourse(data: AssignInstructor){
+  return this.http.post<AssignInstructor>(this.url + '/assign-instructor', data);
+}
+
+getAssignedInstructor(courseId: string){
+  return this.http.get<getInsructor[]>(this.url + `/get-assigned-instructors/${courseId}`)
+}
+
+}
+
+export interface getInsructor{
+  instructorName: string;
+  avatar: File[];
+  instructorKnowCourses: courseNames[];
+}
+
+
+
+export interface AssignInstructor{
+  courseId: string,
+  instructorId: number | undefined
+}
+
+export interface updateCourseData{
+  duration: string;
+  courseFee: number;
+  description: string;
+}
+
+export interface singleCourseLevel{
+  courseName: string,
+  thumbnail: File[],
+  levelId: string,
+  levelName: string,
+  createdDate: string,
+  duration: string,
+  courseFee: number,
+  description: string
 }
 
 export interface getCourseNames{

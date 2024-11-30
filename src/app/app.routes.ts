@@ -22,7 +22,7 @@ export const routes: Routes = [
             {path:'course-management', component:CourseManagementComponent,
                 children:[
                     {path:'', component:ViewCourseComponent},
-                    {path:'edit-course', component:EditCourseComponent}
+                    {path:'edit-course/:id', component:EditCourseComponent}
                 ]
             },
             {path:'payments', component:PaymentsComponent},

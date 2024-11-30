@@ -1,11 +1,12 @@
 <div class="card flex justify-content-center m-5">
+    <p-toast />
     <p-fieldset [toggleable]="true">
         <ng-template pTemplate="header">
             <div class="flex align-items-center gap-2 px-2">
                 <p-avatar 
-                    image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" 
+                    [image]="'data:image/jpeg;base64,'+ singleCourseLevel?.thumbnail" 
                     shape="circle" />
-                <span class="font-bold">Edit</span>
+                <span class="font-bold">Edit - {{singleCourseLevel?.courseName}} - {{singleCourseLevel?.levelName}}</span>
             </div>
         </ng-template>
         
@@ -17,7 +18,8 @@
                     id="courseId"
                     type="text"
                     pInputText 
-                    [disabled]="true" 
+                    [disabled]="true"
+                    [value]="singleCourseLevel?.levelId"
                     />
             </div>
 
@@ -28,6 +30,7 @@
                     type="text"
                     pInputText 
                     [disabled]="true" 
+                    [value]="singleCourseLevel?.levelName"
                     />
             </div>
 
@@ -38,12 +41,13 @@
                     type="text"
                     pInputText 
                     [disabled]="true" 
+                    [value]="singleCourseLevel?.createdDate | date : 'dd-MMM-yyy'"
                     />
             </div>
             <div class="card flex justify-content-center">
                 <div class="card flex justify-content-center flex-column align-items-center">
-                    <label for="" class="font-semibold text-center">Edit mode is Off</label>
-                    <p-inputSwitch [(ngModel)]="checked" class="mt-1"/>
+                    <label for="" class="font-semibold text-center">{{editBtnText}}</label>
+                    <p-inputSwitch [(ngModel)]="checked" class="mt-1" (click)="editBtn()"/>
                 </div>
             </div>
         </div>
@@ -55,7 +59,8 @@
                     id="courseId"
                     type="text"
                     pInputText 
-                    [disabled]="true" 
+                    [disabled]="isDisabled"
+                    [(ngModel)]="formData.duration"
                     />
             </div>
 
@@ -65,7 +70,8 @@
                     id="courseId"
                     type="text"
                     pInputText 
-                    [disabled]="true" 
+                    [disabled]="isDisabled" 
+                    [(ngModel)]="formData.courseFee"
                     />
             </div>
 
@@ -76,17 +82,18 @@
                     type="text"
                     pInputText 
                     [disabled]="true" 
+                    
                     />
             </div>
             
 
             <div>
-                <p-button label="Update" [raised]="true" severity="warning" />
+                <p-button label="Update" [raised]="true" severity="warning" [disabled]="isDisabled" (onClick)="updateSingleCourse()"/>
             </div>
         </div>
 
         <div>
-            <p-editor [style]="{ height: '280px'}" class="pointer-events-none"/>
+            <p-editor [style]="{ height: '280px'}" [class]="editorClass" [(ngModel)]="formData.description"/>
         </div>
     </div>
   
@@ -108,7 +115,7 @@
                         class="p-2 border-round shadow-1 flex flex-column justify-content-center align-items-center"
                         pDraggable 
                         (onDragStart)="dragStart(instructor)" 
-                        (onDragEnd)="dragEnd()"
+                        
                         >
                             <img [src]="'data:image/jpeg;base64,'+ instructor.avatar" alt="" width="100">
                             <h3 class="text-center">{{instructor.instructorName}}</h3>
@@ -122,13 +129,27 @@
                 </div>
                 </div>
             </div>
-            <div class="p-2 border-1 surface-border border-round w-15rem" pDroppable (onDrop)="drop()">
-                <p class="text-center surface-border border-bottom-1 font-semibold">Drop Zone</p>
-                <ul class="list-none flex flex-column gap-2 p-0 m-0" *ngIf="selectedProducts" >
-                    <li *ngFor="let instructor of selectedProducts" class="p-2 border-round shadow-1">
-                        {{instructor.instructorName}}
-                    </li>
-                </ul>
+            <p-confirmDialog />
+            <div class="p-2 border-1 surface-border border-round w-35rem" pDroppable (onDrop)="drop($event)">
+                <p class="text-center surface-border border-bottom-1 font-semibold">{{singleCourseLevel?.courseName}} - {{singleCourseLevel?.levelName}}</p>
+                <div class="flex flex-wrap gap-2 p-0 m-0" *ngIf="selectedInstructor.length > 0; else noInstructors">
+                    <div *ngFor="let instructor of selectedInstructor"
+                        class="p-2 border-round shadow-1 flex flex-column justify-content-center align-items-center">
+                        <div class="flex align-self-end">
+                            <p-button icon="pi pi-times" [rounded]="true" severity="danger"/>
+                        </div>
+                            <img [src]="'data:image/jpeg;base64,'+ instructor.avatar" alt="" width="100">
+                            <h3 class="text-center">{{instructor.instructorName}}</h3>
+                            <div class="flex flex-wrap">
+                                <p-tag *ngFor="let singleCourse of instructor.instructorKnowCourses"
+                                [value]="singleCourse.courseName"
+                                class="mx-1">
+                                
+                                </p-tag>
+                            </div>
+                </div>
+                </div>
+                <ng-template #noInstructors><div class="w-20rem text-center flex align-items-center h-10rem">No instructors have been assigned to this course level. Drag and drop an instructor to assign to this course level.</div></ng-template>
             </div>
         </div>
         
