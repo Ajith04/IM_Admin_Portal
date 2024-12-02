@@ -11,10 +11,11 @@ import { DragDropModule } from 'primeng/dragdrop';
 import { CourseService, InstructorForCourse, singleCourseLevel, updateCourseData, AssignInstructor, getInsructor } from '../../Services/course.service';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { TagModule } from 'primeng/tag';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { timeout } from 'rxjs';
 
 
 
@@ -29,7 +30,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 })
 export class EditCourseComponent implements OnInit{
 
-    constructor(private courseService: CourseService, private route: ActivatedRoute, private messageService: MessageService, private confirmationService: ConfirmationService){
+    constructor(private courseService: CourseService, private route: ActivatedRoute, private messageService: MessageService, private confirmationService: ConfirmationService, private router: Router){
 
     }
 
@@ -70,12 +71,16 @@ export class EditCourseComponent implements OnInit{
 
       this.getSingleCourseLevel();
 
-
-      this.courseService.getInstructorForCourse().subscribe({next:(data: InstructorForCourse[]) => {this.allInstructors = data;}});
+      this.getInstructorForCourse();
+      
       this.getAssignedInstructor();
       
       
 
+  }
+
+  getInstructorForCourse(){
+    this.courseService.getInstructorForCourse(this.levelId).subscribe({next:(data: InstructorForCourse[]) => {this.allInstructors = data;}});
   }
 
   
@@ -102,6 +107,7 @@ export class EditCourseComponent implements OnInit{
              next: () => {
                this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Instructor Assigned!' });
                this.getAssignedInstructor();
+               this.getInstructorForCourse();
              },
              error: () => {
                this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to assign Instructor.' });
@@ -149,6 +155,68 @@ export class EditCourseComponent implements OnInit{
   getAssignedInstructor(){
     this.courseService.getAssignedInstructor(this.levelId).subscribe({next:(data: getInsructor[]) => {this.selectedInstructor = data;}});
    
+
+  }
+
+  deleteEnrollment(event: Event, enrollmentId:number){
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      message: 'Are you sure that you want to proceed?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      acceptIcon:"none",
+      rejectIcon:"none",
+      rejectButtonStyleClass:"p-button-text",
+      accept: () => {
+        this.courseService.deleteEnrollment(enrollmentId).subscribe({
+         next: () => {
+           this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Instructor Removed!' });
+           this.getAssignedInstructor();
+           this.getInstructorForCourse();
+          
+         },
+         error: () => {
+           this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to remove Instructor.' });
+         }
+       });
+      },
+      reject: () => {
+          
+      }
+  });
+
+  }
+
+  deleteLevel(event: Event, levelId: string){
+
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      message: 'Are you sure that you want to proceed?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      acceptIcon:"none",
+      rejectIcon:"none",
+      rejectButtonStyleClass:"p-button-text",
+      accept: () => {
+        this.courseService.deleteLevel(levelId).subscribe({
+         next: () => {
+           this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Course Level Removed!' });
+           
+           setTimeout(() => {
+            this.router.navigate(['/admin/course-management']);
+          }, 2000);
+           
+         },
+         error: () => {
+           this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to remove Course Level.' });
+         }
+       });
+      },
+      reject: () => {
+          
+      }
+  });
+
 
   }
 

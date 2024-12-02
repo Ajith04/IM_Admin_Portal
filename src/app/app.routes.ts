@@ -12,6 +12,10 @@ import { EditCourseComponent } from './Components/edit-course/edit-course.compon
 import { Component } from '@angular/core';
 import { InstructorComponent } from './Components/instructor/instructor.component';
 import { AddCourseNameComponent } from './Components/add-course-name/add-course-name.component';
+import { AddCourseCategoryComponent } from './Components/add-course-category/add-course-category.component';
+import { AddCourseLevelComponent } from './Components/add-course-level/add-course-level.component';
+import { AddBatchComponent } from './Components/add-batch/add-batch.component';
+import { ExpenseComponent } from './Components/expense/expense.component';
 
 export const routes: Routes = [
     {path:'login', component:LoginComponent},
@@ -28,8 +32,13 @@ export const routes: Routes = [
             {path:'payments', component:PaymentsComponent},
             {path:'institute-management', component:InstituteManagementComponent,
                 children:[
+                    {path:'course-name', component:AddCourseNameComponent},
+                    {path:'course-category', component:AddCourseCategoryComponent},
+                    {path:'course-level', component:AddCourseLevelComponent},
+                    {path:'batch', component:AddBatchComponent},
                     {path:'instructor', component:InstructorComponent},
-                    {path:'course-name', component:AddCourseNameComponent}
+                    {path:'expense', component:ExpenseComponent}
+
 
                 ]
             },

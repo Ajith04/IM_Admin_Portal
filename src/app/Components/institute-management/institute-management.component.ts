@@ -35,6 +35,7 @@ export class InstituteManagementComponent {
     allCourseNames: getCourseNames[] = [];
 
     addInstructor: FormGroup;
+    addExpense: FormGroup;
 
     constructor(private fb: FormBuilder, private imService: IMService, private messageService: MessageService, private router: Router, private courseService: CourseService){
         this.addInstructor = this.fb.group({
@@ -46,9 +47,19 @@ export class InstituteManagementComponent {
             mobile:['', Validators.required],
             email:['', Validators.required],
         });
+
+        this.addExpense = this.fb.group({
+            title: ['', Validators.required],
+            date: ['', Validators.required],
+            amount: [null, Validators.required],
+            description: [''],
+            receipt: [[], Validators.required],
+            
+        })
     }
     
-    visible: boolean = false;
+    addInstructorVisible: boolean = false;
+    addExpenseVisible: boolean = false;
 
     items: MenuItem[] = [];
 
@@ -71,28 +82,28 @@ export class InstituteManagementComponent {
                         label: 'Course Category',
                         icon: 'pi pi-bars',
                         command: () => {
-                            
+                            this.router.navigate(['/admin/institute-management/course-category']);
                         }
                     },
                     {
                         label: 'Course Level',
                         icon: 'pi pi-file-o',
                         command: () => {
-                            
+                            this.router.navigate(['/admin/institute-management/course-level']);
                         }
                     },
                     {
                         label: 'Batch',
                         icon: 'pi pi-clone',
                         command: () => {
-                            
+                            this.router.navigate(['/admin/institute-management/batch']);
                         }
                     },
                     {
                         label: 'Instructor',
                         icon: 'pi pi-user',
                         command: () => {
-                            this.visible = true;
+                            this.addInstructorVisible = true;
                             this.courseService.getAllCourseNames().subscribe({next:(data: getCourseNames[]) => {this.allCourseNames = data}});
                         }
                     },
@@ -100,6 +111,8 @@ export class InstituteManagementComponent {
                         label: 'Expense',
                         icon: 'pi pi-wallet',
                         command: () => {
+                            this.addExpenseVisible = true;
+                            
                             
                         }
                     }
@@ -120,7 +133,7 @@ export class InstituteManagementComponent {
                         label: 'All Expenses',
                         icon: 'pi pi-wallet',
                         command: () => {
-                           
+                            this.router.navigate(['/admin/institute-management/expense']);
                         }
                     },
                     {
@@ -149,7 +162,7 @@ export class InstituteManagementComponent {
         ];
     }
 
-    onSelect(event: any) {
+    onInstructorSelect(event: any) {
         const selectedFile = event.files[0];
         this.addInstructor.patchValue({ avatar: selectedFile });
       }
@@ -176,7 +189,7 @@ export class InstituteManagementComponent {
 
             this.imService.sendInstructor(formData).subscribe({next: () => {
                 this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Instructor added!' });
-                this.visible = false;
+                this.addInstructorVisible = false;
                 this.router.navigate(['/admin/institute-management/instructor']);
               },
               error: () => {
@@ -186,6 +199,53 @@ export class InstituteManagementComponent {
         }
 
 
+    }
+
+    onExpenseSelect(event:any): void{
+        const selectedFiles = event.files || [];
+        const currentFiles = this.addExpense.get('receipt')?.value || [];
+
+    this.addExpense.patchValue({
+    receipt: [...currentFiles, ...selectedFiles],
+        });
+    }
+
+
+    sendExpense(){
+        if(this.addExpense.valid){
+
+            const formData = new FormData;
+
+            var selectedTitle = this.addExpense.get('title')?.value;
+            formData.append('title', selectedTitle);
+
+            var selectedDate = this.addExpense.value.date;
+            var formattedDate = selectedDate ? selectedDate.toISOString() : null;
+            var selectedDate = this.addExpense.get('date')?.value;
+            formData.append('date', formattedDate);
+
+            var selectedAmount = this.addExpense.get('amount')?.value;
+            formData.append('amount', selectedAmount);
+
+            var selectedDescription = this.addExpense.get('description')?.value;
+            formData.append('description', selectedDescription);
+
+            this.addExpense.value.receipt.forEach((file: File) => {
+                formData.append('receipt', file);
+              });
+
+            this.imService.sendExpense(formData).subscribe({
+            next: () => {
+                this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Main Course added!' });
+                this.addExpenseVisible = false;
+                
+            },
+            error: () => {
+                this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to add Main Course.' });
+            }
+            });
+
+        }
     }
 
 }

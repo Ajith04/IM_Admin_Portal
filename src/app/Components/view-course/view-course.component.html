@@ -243,18 +243,18 @@
                     <td>
                       <span
                         *ngIf="
-                          courseLevel?.instructors &&
-                          courseLevel.instructors.length > 0;
+                          courseLevel?.instructorResponses &&
+                          courseLevel.instructorResponses.length > 0;
                           else noInstructors
                         "
                       >
                         <ng-container
                           *ngFor="
-                            let instructor of courseLevel.instructors
+                            let instructor of courseLevel.instructorResponses
                           "
                         >
                           <p-tag
-                            [value]="instructor"
+                            [value]="instructor.instructorName"
                             class="mr-2 mb-2"
                           ></p-tag>
                         </ng-container>

@@ -35,8 +35,8 @@ getAllCourses(){
   return this.http.get<AllMainCourse[]>(this.url + '/get-all-courses');
 }
 
-getInstructorForCourse(){
-  return this.http.get<InstructorForCourse[]>(this.url + '/get-instructor-for-course');
+getInstructorForCourse(levelId: string){
+  return this.http.get<InstructorForCourse[]>(this.url + `/get-instructor-for-course/${levelId}`);
 }
 
 getAllCourseNames(){
@@ -44,7 +44,7 @@ getAllCourseNames(){
 }
 
 getSingleCourseLevel(id: string){
-  return this.http.get<singleCourseLevel>(this.url + `/get-single-course-level/${id}`)
+  return this.http.get<singleCourseLevel>(this.url + `/get-single-course-level/${id}`);
 }
 
 updateSingleCourse(levelId: string, formData:updateCourseData){
@@ -56,12 +56,21 @@ instructorToCourse(data: AssignInstructor){
 }
 
 getAssignedInstructor(courseId: string){
-  return this.http.get<getInsructor[]>(this.url + `/get-assigned-instructors/${courseId}`)
+  return this.http.get<getInsructor[]>(this.url + `/get-assigned-instructors/${courseId}`);
+}
+
+deleteEnrollment(enrollmentId: number){
+  return this.http.delete(this.url + `/remove-assigned-instructor/${enrollmentId}`);
+}
+
+deleteLevel(levelId: string){
+return this.http.delete(this.url + `/delete-course-level/${levelId}`);
 }
 
 }
 
 export interface getInsructor{
+  enrollmentId: number;
   instructorName: string;
   avatar: File[];
   instructorKnowCourses: courseNames[];
@@ -128,7 +137,7 @@ export interface AllCourseLevel{
   Duration: string;
   CourseFee: number;
   Description: string;
-  Instructors: Instructor[];
+  instructorResponses: Instructor[];
 }
 
 export interface Instructor{

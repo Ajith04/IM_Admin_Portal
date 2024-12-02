@@ -158,6 +158,7 @@ addLevel() {
 
     getAllCourses(){
       this.courseService.getAllCourses().subscribe({next: (data: AllMainCourse[]) => {this.allCourses = data}});
+     
       
     }
 
