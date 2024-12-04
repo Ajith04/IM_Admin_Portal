@@ -54,6 +54,22 @@ export class IMService {
     return this.http.get<Expense[]>(this.url + '/get-all-expenses')
   }
 
+  getRegFee(){
+    return this.http.get<number>(this.url + '/get-reg-fee')
+  }
+
+  changeRegFee(changeRegFee: ChangeRegFee){
+    return this.http.patch<ChangeRegFee>(this.url + '/change-reg-fee', changeRegFee);
+  }
+
+  removeInstructor(instructorId: number){
+    return this.http.delete(this.url + `/remove-instructor-by-id/${instructorId}`);
+  }
+
+}
+
+export interface ChangeRegFee{
+  newRegFee: number;
 }
 
 export interface Expense{
@@ -85,13 +101,22 @@ export interface CourseName{
   name: string;
 }
 
-
-
 export interface Instructor{
+  InstructorId: number;
   InstructorName: string;
   Description: string;
   Avatar: File[];
   DateOfJoin: string;
   Mobile: string;
   Email: string;
+  instructorKnowCourseResponses: InstructorKnowCourse[],
+  instructorAssignedCourseResponses: InstructorAssignedCourse[]
+}
+
+export interface InstructorKnowCourse{
+  CourseName: string;
+}
+
+export interface InstructorAssignedCourse{
+  CourseName: string;
 }

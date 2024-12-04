@@ -12,11 +12,12 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { FileUploadModule } from 'primeng/fileupload';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { CalendarModule } from 'primeng/calendar';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IMService } from '../../Services/im.service';
 import { Router } from '@angular/router';
 import { CourseService, getCourseNames } from '../../Services/course.service';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { CommonModule, CurrencyPipe } from '@angular/common';
 
 
 
@@ -25,8 +26,8 @@ import { MultiSelectModule } from 'primeng/multiselect';
 @Component({
   selector: 'app-institute-management',
   standalone: true,
-  imports: [CardModule, ButtonModule, SpeedDialModule, TooltipModule, PanelMenuModule, ToastModule, DialogModule, InputTextModule, InputTextareaModule, FileUploadModule, HttpClientModule, CalendarModule, ReactiveFormsModule, MultiSelectModule],
-  providers: [MessageService, IMService],
+  imports: [CardModule, ButtonModule, SpeedDialModule, TooltipModule, PanelMenuModule, ToastModule, DialogModule, InputTextModule, InputTextareaModule, FileUploadModule, HttpClientModule, CalendarModule, ReactiveFormsModule, MultiSelectModule, FormsModule, CurrencyPipe],
+  providers: [MessageService, IMService, ReactiveFormsModule],
   templateUrl: './institute-management.component.html',
   styleUrl: './institute-management.component.css'
 })
@@ -55,13 +56,22 @@ export class InstituteManagementComponent {
             description: [''],
             receipt: [[], Validators.required],
             
+        });
+
+        this.changeRegFeeForm = this.fb.group({
+            newRegFee: [null, Validators.required]
         })
+
     }
     
     addInstructorVisible: boolean = false;
     addExpenseVisible: boolean = false;
+    regFeeVisible: boolean = false;
 
     items: MenuItem[] = [];
+    regFee: number | undefined;
+    changeRegFeeForm: FormGroup;
+    
 
    
 
@@ -156,7 +166,8 @@ export class InstituteManagementComponent {
                 label: 'Change Registration Fee',
                 icon: 'pi pi-money-bill',
                 command: () => {
-                    
+                    this.regFeeVisible = true;
+                    this.getRegFee();
                 }
             }
         ];
@@ -236,16 +247,35 @@ export class InstituteManagementComponent {
 
             this.imService.sendExpense(formData).subscribe({
             next: () => {
-                this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Main Course added!' });
+                this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Expense added!' });
                 this.addExpenseVisible = false;
                 
             },
             error: () => {
-                this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to add Main Course.' });
+                this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to add Expense.' });
             }
             });
 
         }
+    }
+
+    getRegFee(){
+        this.imService.getRegFee().subscribe({next:(data: number) => {this.regFee = data}});
+    }
+
+    changeRegFee(){  
+        this.imService.changeRegFee(this.changeRegFeeForm.value).subscribe({
+            next: () => {
+                this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Registration Fee Changed!' });
+                this.changeRegFeeForm.reset();
+                this.regFeeVisible = false;
+                
+            },
+            error: () => {
+                this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to change Registration Fee.' });
+            }
+            });
+       
     }
 
 }
