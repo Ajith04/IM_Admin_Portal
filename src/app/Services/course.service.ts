@@ -112,7 +112,7 @@ export interface InstructorForCourse{
 }
 
 export interface courseNames{
-  courseName: string;
+  name: string;
 }
 
 export interface AllInstructors{

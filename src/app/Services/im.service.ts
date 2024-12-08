@@ -66,6 +66,21 @@ export class IMService {
     return this.http.delete(this.url + `/remove-instructor-by-id/${instructorId}`);
   }
 
+  showSingleInstructor(instructorId: number){
+    return this.http.get<Instructor>(this.url + `/get-single-instructor/${instructorId}`)
+  }
+
+  updateInstructor(instructorId: number, data: FormData){
+    return this.http.patch<FormData>(this.url + `/update-instructor/${instructorId}`, data)
+  }
+}
+
+export interface editCourse{
+  avatar: File;
+  description: string;
+  mobile: string;
+  email: string;
+  knownCourses: InstructorKnowCourse[];
 }
 
 export interface ChangeRegFee{
@@ -102,21 +117,21 @@ export interface CourseName{
 }
 
 export interface Instructor{
-  InstructorId: number;
-  InstructorName: string;
-  Description: string;
-  Avatar: File[];
-  DateOfJoin: string;
-  Mobile: string;
-  Email: string;
+  instructorId: number;
+  instructorName: string;
+  description: string;
+  avatar: File;
+  dateOfJoin: string;
+  mobile: string;
+  email: string;
   instructorKnowCourseResponses: InstructorKnowCourse[],
   instructorAssignedCourseResponses: InstructorAssignedCourse[]
 }
 
 export interface InstructorKnowCourse{
-  CourseName: string;
+  name: string;
 }
 
 export interface InstructorAssignedCourse{
-  CourseName: string;
+  courseName: string;
 }

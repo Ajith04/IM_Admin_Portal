@@ -29,11 +29,12 @@ import { AllCourseLevel, AllMainCourse, Category, CourseService, getCourseNames,
 import { MessageService, ConfirmationService, MenuItem } from 'primeng/api';
 import { Router } from '@angular/router';
 import { ImageModule } from 'primeng/image';
+import { ScrollTopModule } from 'primeng/scrolltop';
 
 @Component({
   selector: 'app-view-course',
   standalone: true,
-  imports: [TableModule, TagModule, ToastModule, RatingModule, ButtonModule, HttpClientModule, DialogModule, RippleModule, ToolbarModule, ConfirmDialogModule, InputTextModule, InputTextareaModule, CommonModule, FileUploadModule, DropdownModule, RadioButtonModule, RatingModule, FormsModule, InputNumberModule, SplitButtonModule, IconFieldModule, InputIconModule, SkeletonModule, CalendarModule, MultiSelectModule, ReactiveFormsModule, FloatLabelModule, EditorModule, ImageModule],
+  imports: [TableModule, TagModule, ToastModule, RatingModule, ButtonModule, HttpClientModule, DialogModule, RippleModule, ToolbarModule, ConfirmDialogModule, InputTextModule, InputTextareaModule, CommonModule, FileUploadModule, DropdownModule, RadioButtonModule, RatingModule, FormsModule, InputNumberModule, SplitButtonModule, IconFieldModule, InputIconModule, SkeletonModule, CalendarModule, MultiSelectModule, ReactiveFormsModule, FloatLabelModule, EditorModule, ImageModule, ScrollTopModule],
   providers: [CourseService, MessageService, ConfirmationService],
   templateUrl: './view-course.component.html',
   styleUrl: './view-course.component.css',

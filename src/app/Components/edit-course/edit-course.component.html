@@ -121,7 +121,7 @@
                             <h3 class="text-center">{{instructor.instructorName}}</h3>
                             <div class="flex flex-wrap">
                                 <p-tag *ngFor="let singleCourse of instructor.instructorCourseNameResponses"
-                                [value]="singleCourse.courseName"
+                                [value]="singleCourse.name"
                                 class="mx-1">
                                 
                                 </p-tag>
@@ -142,7 +142,7 @@
                             <h3 class="text-center">{{instructor.instructorName}}</h3>
                             <div class="flex flex-wrap">
                                 <p-tag *ngFor="let singleCourse of instructor.instructorKnowCourses"
-                                [value]="singleCourse.courseName"
+                                [value]="singleCourse.name"
                                 class="mx-1">
                                 
                                 </p-tag>
