@@ -2,7 +2,42 @@
     <p-toast />
   
     <p-toolbar>
-      <ng-template pTemplate="left"> </ng-template>
+      <ng-template pTemplate="left"> 
+        <div class="flex">
+          <div><h3>All Courses</h3></div>
+          
+        <div class="flex justify-content-center align-self-center gap-3 ml-8">
+
+          <p-floatLabel>
+            <input
+              pInputText
+              type="text"
+              [(ngModel)]="searchValue"
+              (input)="onSearch($event, dt1)"
+              inputId="search"
+            />
+          <label for="search" class="text-sm">
+            <i class="pi pi-search mr-1"></i>
+          Search by Course Name</label>
+        </p-floatLabel>
+    
+        <p-floatLabel><p-dropdown 
+          [options]="categories" 
+          [(ngModel)]="selectedCategory"
+          [checkmark]="true" 
+          optionLabel="categoryName" 
+          [showClear]="true"
+          (onChange)="onFilter(dt1)"
+          inputId="categoryFilter"
+          appendTo="body"/>
+          <label for="categoryFilter" class="text-sm"><i class="pi pi-filter mr-1"></i>Filter by Category</label>
+        </p-floatLabel>
+        </div>
+         
+      </div>
+  
+
+      </ng-template>
   
       <ng-template pTemplate="right">
         <p-splitButton
@@ -38,7 +73,9 @@
             [options]="categories" 
             formControlName="categories"
             optionLabel="categoryName" 
-            placeholder="Choose Category"/>
+            placeholder="Choose Category"
+            display="chip" 
+            [showClear]="true"/>
         </div>
 
       
@@ -144,48 +181,11 @@
       (onRowExpand)="onRowExpand($event)"
       (onRowCollapse)="onRowCollapse($event)"
     >
-    
-      <ng-template pTemplate="header">
-        <tr>
-          <th style="width: 5rem;"></th>
-          <th>All Courses</th>
-          <th></th>
-          <th>
-              <p-floatLabel>
-              <input
-                pInputText
-                type="text"
-                [(ngModel)]="searchValue"
-                (input)="onSearch($event, dt1)"
-                inputId="search"
-              />
-            
-            <label for="search" class="text-sm">
-              <i class="pi pi-search mr-1"></i>
-            Search by Course Name</label>
-          </p-floatLabel>
-          </th>
-            <th>
-              <p-floatLabel><p-dropdown 
-              [options]="categories" 
-              [(ngModel)]="selectedCategory"
-              [checkmark]="true" 
-              optionLabel="categoryName" 
-              [showClear]="true"
-              (onChange)="onFilter(dt1)"
-              inputId="categoryFilter"
-              appendTo="body"/>
-              <label for="categoryFilter" class="text-sm"><i class="pi pi-filter mr-1"></i>Filter by Category</label>
-            </p-floatLabel>
-            </th>
-              
-          </tr>
-          </ng-template>
+
   
       <ng-template pTemplate="body" let-allCourses let-expanded="expanded">
-          
         <tr>
-          <td>
+          <td style="width: 5rem;">
             <p-button
               type="button"
               pRipple
@@ -196,7 +196,7 @@
               [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
             />
           </td>
-          <td style="width: 10rem;"><p-image [src]="'data:image/jpeg;base64,' + allCourses.thumbnail" alt="" width="50" [preview]="true"/></td>
+          <td style="width: 5rem;"><p-image [src]="'data:image/jpeg;base64,' + allCourses.thumbnail" alt="" width="50" [preview]="true"/></td>
           <td><h3>{{allCourses.courseName}}</h3>
             <span *ngIf=" allCourses?.categories && allCourses.categories.length > 0;" class="flex mt-3">
               <ng-container *ngFor="let category of allCourses.categories">

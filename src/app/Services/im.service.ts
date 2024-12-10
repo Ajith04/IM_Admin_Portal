@@ -73,6 +73,31 @@ export class IMService {
   updateInstructor(instructorId: number, data: FormData){
     return this.http.patch<FormData>(this.url + `/update-instructor/${instructorId}`, data)
   }
+
+  getAllFollowup(){
+    return this.http.get<GetFollowUp[]>('https://localhost:7215/api/Student/get-all-followup');
+  }
+
+  removeFollowup(id: number){
+    return this.http.delete(`https://localhost:7215/api/Student/remove-followup/${id}`)
+  }
+
+  updateDescription(id: number, description: string){
+    const body = { description };
+    return this.http.patch<string>(`https://localhost:7215/api/Student/update-description/${id}`, body)
+  }
+}
+
+export interface GetFollowUp{
+  id: number;
+  name: string;
+  courses: string[];
+  mobile: string;
+  date: string;
+  email: string;
+  address: string;
+  description: string;
+
 }
 
 export interface editCourse{

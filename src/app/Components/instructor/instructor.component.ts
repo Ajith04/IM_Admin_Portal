@@ -119,6 +119,7 @@ export class InstructorComponent {
 
   editBtn(){
     this.isEdit = this.isEdit == true ? false : true;
+    this.editText = this.editText === 'Edit mode is Off' ? 'Edit mode is On' : 'Edit mode is Off';
   }
 
   onFileSelect(event: any) {

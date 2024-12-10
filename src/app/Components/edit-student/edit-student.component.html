@@ -1,0 +1,217 @@
+<div class="card flex justify-content-center m-5">
+    <p-confirmDialog />
+    <p-toast />
+    <p-fieldset [toggleable]="true">
+        <ng-template pTemplate="header">
+            <div class="flex align-items-center gap-2 px-2">
+                <span class="font-bold">Edit - {{singleStudent?.studentId}}</span>
+            </div>
+        </ng-template>
+        
+        <div class="flex flex-column">
+            <div class="flex gap-5 justify-content-center mb-5">
+                <div class="card flex flex-column gap-2">
+                    <label for="courseId" class="font-semibold w-6rem">First Name</label>
+                    <input 
+                        id="firstName"
+                        type="text"
+                        pInputText 
+                        [disabled]="true"
+                        [value]="singleStudent?.firstName"
+                        />
+                </div>
+
+                <div class="card flex flex-column gap-2">
+                    <label for="courseId" class="font-semibold w-6rem">Last Name</label>
+                    <input 
+                        id="lastName"
+                        type="text"
+                        pInputText 
+                        [disabled]="true" 
+                        [value]="singleStudent?.lastName"
+                        />
+                </div>
+
+                <div class="card flex flex-column gap-2">
+                    <label for="courseId" class="font-semibold">Date of Join</label>
+                    <input 
+                        id="dateOfJoin"
+                        type="text"
+                        pInputText 
+                        [disabled]="true" 
+                        [value]="singleStudent?.dateOfJoin | date : 'dd-MMM-yyy'"
+                        />
+                </div>
+
+                <div class="card flex flex-column gap-2">
+                    <label for="courseId" class="font-semibold">Intake</label>
+                    <input 
+                        id="intake"
+                        type="text"
+                        pInputText 
+                        [disabled]="true" 
+                        [value]="singleStudent?.intake"
+                        />
+                </div>
+            </div>
+
+            <div class="flex gap-5 justify-content-center mb-5">
+                <div class="card flex flex-column gap-2">
+                    <label for="courseId" class="font-semibold w-6rem">Mobile No</label>
+                    <input 
+                        id="courseId"
+                        type="text"
+                        pInputText 
+                        [disabled]="isDisabled"
+                        [(ngModel)]="formData.mobile"
+                        />
+                </div>
+
+                <div class="card flex flex-column gap-2 mb-3">
+                    <label for="courseId" class="font-semibold w-6rem">Email</label>
+                    <input 
+                        id="courseId"
+                        type="text"
+                        pInputText 
+                        [disabled]="isDisabled" 
+                        [(ngModel)]="formData.email"
+                        />
+                </div>
+
+                <div class="card flex flex-column gap-2 mb-3">
+                    <label for="courseId" class="font-semibold w-6rem">Address</label>
+                    <input 
+                        id="courseId"
+                        type="text"
+                        pInputText 
+                        [disabled]="isDisabled" 
+                        [(ngModel)]="formData.address"
+                        />
+                </div>
+            </div>
+
+            <div class="flex gap-5 justify-content-center">
+                <div class="card flex justify-content-center">
+                    <div class="card flex justify-content-center flex-column align-items-center">
+                        <label for="" class="font-semibold text-center">{{editBtnText}}</label>
+                        <p-inputSwitch [(ngModel)]="checked" class="mt-1" (click)="editBtn()"/>
+                    </div>
+                </div>
+
+                <p-button label="Update" [raised]="true" severity="warning" [disabled]="isDisabled" (onClick)="updateSingleCourse()"/>
+            </div>
+        </div>  
+    </p-fieldset>
+</div>
+
+
+
+<div class="card flex justify-content-center m-5">
+    
+    <p-fieldset legend="Assign Courses" [toggleable]="true">
+        <h3 class="text-center mt-0 mb-2">Drag and drop to assign course</h3>
+        <div class="card flex flex-wrap gap-3">
+            <div class="p-2 border-1 surface-border border-round w-35rem">
+                <p class="text-center surface-border border-bottom-1 font-semibold">Courses</p>
+                <div class="flex gap-2 p-0 m-0 flex-wrap">
+                    <div 
+                        *ngFor="let instructor of allInstructors" 
+                        class="p-2 border-round shadow-1 flex flex-column justify-content-center align-items-center"
+                        pDraggable 
+                        (onDragStart)="dragStart(instructor)" 
+                        
+                        >
+                            <img [src]="'data:image/jpeg;base64,'+ instructor.avatar" alt="" width="100">
+                            <h3 class="text-center">{{instructor.instructorName}}</h3>
+                            <div class="flex flex-wrap">
+                                <p-tag *ngFor="let singleCourse of instructor.instructorCourseNameResponses"
+                                [value]="singleCourse.name"
+                                class="mx-1">
+                                
+                                </p-tag>
+                            </div>
+                </div>
+                </div>
+            </div>
+            
+            <div class="p-2 border-1 surface-border border-round w-35rem" pDroppable (onDrop)="drop($event)">
+                <p class="text-center surface-border border-bottom-1 font-semibold">{{singleStudent?.studentId}} - {{singleStudent?.firstName}}</p>
+                <div class="flex flex-wrap gap-2 p-0 m-0" *ngIf="selectedInstructor.length > 0; else noInstructors">
+                    <div *ngFor="let instructor of selectedInstructor"
+                        class="p-2 border-round shadow-1 flex flex-column justify-content-center align-items-center">
+                        <div class="flex align-self-end">
+                            <p-button icon="pi pi-times" [rounded]="true" severity="danger" (onClick)="deleteEnrollment($event, instructor.enrollmentId)"/>
+                        </div>
+                            <img [src]="'data:image/jpeg;base64,'+ instructor.avatar" alt="" width="100">
+                            <h3 class="text-center">{{instructor.instructorName}}</h3>
+                            <div class="flex flex-wrap">
+                                <p-tag *ngFor="let singleCourse of instructor.instructorKnowCourses"
+                                [value]="singleCourse.name"
+                                class="mx-1">
+                                
+                                </p-tag>
+                            </div>
+                </div>
+                </div>
+                <ng-template #noInstructors><div class="w-20rem text-center flex align-items-center h-10rem">No instructors have been assigned to this course level. Drag and drop an instructor to assign to this course level.</div></ng-template>
+            </div>
+        </div>
+        
+    </p-fieldset>
+</div>
+
+
+<div class="card flex justify-content-center m-5">
+    
+    <p-fieldset legend="Assign Batch" [toggleable]="true">
+        <h3 class="text-center mt-0 mb-2">Drag and drop to assign batch</h3>
+        <div class="card flex flex-wrap gap-3">
+            <div class="p-2 border-1 surface-border border-round w-35rem">
+                <p class="text-center surface-border border-bottom-1 font-semibold">Batches</p>
+                <ul class="list-none flex flex-column gap-2 p-0 m-0">
+                    <li 
+                        *ngFor="let batch of batchForStudent" 
+                        class="p-2 border-round shadow-1"
+                        pDraggable 
+                        (onDragStart)="batchDragStart(batch)" 
+                        >
+                            {{batch.batchName}}
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="p-2 border-1 surface-border border-round w-35rem" pDroppable (onDrop)="batchDrop($event)">
+                <p class="text-center surface-border border-bottom-1 font-semibold">{{singleStudent?.studentId}} - {{singleStudent?.firstName}}</p>
+                <div class="flex flex-wrap gap-2 p-0 m-0" *ngIf="selectedInstructor.length > 0; else noInstructors">
+                    <div *ngFor="let instructor of selectedInstructor"
+                        class="p-2 border-round shadow-1 flex flex-column justify-content-center align-items-center">
+                        <div class="flex align-self-end">
+                            <p-button icon="pi pi-times" [rounded]="true" severity="danger" (onClick)="deleteEnrollment($event, instructor.enrollmentId)"/>
+                        </div>
+                            <img [src]="'data:image/jpeg;base64,'+ instructor.avatar" alt="" width="100">
+                            <h3 class="text-center">{{instructor.instructorName}}</h3>
+                            <div class="flex flex-wrap">
+                                <p-tag *ngFor="let singleCourse of instructor.instructorKnowCourses"
+                                [value]="singleCourse.name"
+                                class="mx-1">
+                                
+                                </p-tag>
+                            </div>
+                </div>
+                </div>
+                <ng-template #noInstructors><div class="w-20rem text-center flex align-items-center h-10rem">No Batches have been assigned to this Student. Drag and drop a Batch to assign to this Student.</div></ng-template>
+            </div>
+        </div>
+        
+    </p-fieldset>
+</div>
+
+
+<div class="card flex justify-content-center m-5">
+    <p-fieldset legend="Delete" [toggleable]="true" class="w-full">
+        <div class="flex justify-content-around">
+       <h3>Do you want to delete this Student?</h3>
+       <p-button label="Yes" severity="danger" (onClick)="deleteStudent($event, this.studentId)"/>
+    </div>
+    </p-fieldset>
+</div>

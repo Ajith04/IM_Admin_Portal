@@ -16,13 +16,21 @@ import { AddCourseCategoryComponent } from './Components/add-course-category/add
 import { AddCourseLevelComponent } from './Components/add-course-level/add-course-level.component';
 import { AddBatchComponent } from './Components/add-batch/add-batch.component';
 import { ExpenseComponent } from './Components/expense/expense.component';
+import { ViewStudentComponent } from './Components/view-student/view-student.component';
+import { EditStudentComponent } from './Components/edit-student/edit-student.component';
+import { FollowupComponent } from './Components/followup/followup.component';
 
 export const routes: Routes = [
     {path:'login', component:LoginComponent},
     {path:'admin', component:AdminLayoutComponent,
         children:[
             {path:'dashboard', component:DashboardComponent},
-            {path:'student-management', component:StudentManagementComponent},
+            {path:'student-management', component:StudentManagementComponent,
+                children:[
+                    {path:'', component:ViewStudentComponent},
+                    {path:'edit-student/:id', component:EditStudentComponent}
+                ]
+            },
             {path:'course-management', component:CourseManagementComponent,
                 children:[
                     {path:'', component:ViewCourseComponent},
@@ -37,8 +45,8 @@ export const routes: Routes = [
                     {path:'course-level', component:AddCourseLevelComponent},
                     {path:'batch', component:AddBatchComponent},
                     {path:'instructor', component:InstructorComponent},
-                    {path:'expense', component:ExpenseComponent}
-
+                    {path:'expense', component:ExpenseComponent},
+                    {path:'followup', component:FollowupComponent},
 
                 ]
             },

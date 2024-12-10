@@ -1,0 +1,52 @@
+<p-toast />
+<p-confirmDialog />
+
+<div class="card mx-5">
+    <p-table [value]="allFollowup" [tableStyle]="{'min-width': '60rem'}">
+        <ng-template pTemplate="caption">
+            <div class="flex align-items-center justify-content-between">
+                Follow-Up List
+                <p-button icon="pi pi-refresh" />
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Name</th>
+                <th>Inquired Courses</th>
+                <th>Inquired Date</th>
+                <th>Email</th>
+                <th>Address</th>
+                <th>Mobile No</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-allFollowup let-i="rowIndex">
+            <tr>
+                <td>{{allFollowup.name}}</td>
+                <td><p-tag *ngFor="let course of allFollowup.courses" class="mr-1">{{course}}</p-tag></td>
+                <td>{{allFollowup.date | date : 'dd/MMM/yyyy'}}</td>
+                <td>{{allFollowup.email}}</td>
+                <td>{{allFollowup.address}}</td>
+                <td>{{allFollowup.mobile}}</td>
+                <td>
+                    <div class="flex flex-column">
+                        <textarea pSize="small" pInputTextarea [autoResize]="true" class="mb-1" [disabled]="!editBtn[i]" [(ngModel)]="allFollowup.description"></textarea>
+                        <p-inputSwitch class="align-self-end" (onChange)="onChange(i)"></p-inputSwitch>
+                    </div>
+                </td>
+                <td>
+                    <div class="flex gap-1">
+                    <p-button icon="pi pi-check" severity="warning" [disabled]="!editBtn[i]" (onClick)="updateDescription(allFollowup.id, i)"/>
+                    <p-button icon="pi pi-times" severity="danger" (onClick)="removeFollowup($event, allFollowup.id)"/>
+                </div>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+            <div class="flex align-items-center justify-content-between">
+                Total: {{allFollowup ? allFollowup.length : 0 }} FollowUp Students.
+            </div>
+        </ng-template>
+    </p-table>
+</div>

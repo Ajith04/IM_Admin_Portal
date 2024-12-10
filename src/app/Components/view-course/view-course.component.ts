@@ -112,11 +112,11 @@ onSearch(event: Event, table: any): void {
   table.filterGlobal(value, 'contains');
 }
 
-onFilter(table: any): void {
+onFilter(tag: any): void {
   if (this.selectedCategory && this.selectedCategory.categoryName) {
-    table.filterGlobal(this.selectedCategory.categoryName, 'contains');
+    tag.filterGlobal(this.selectedCategory.categoryName, 'contains');
   } else {
-    table.clear();
+    tag.clear();
   }
 }
 

@@ -150,7 +150,7 @@ export class InstituteManagementComponent {
                         label: 'Follow-up List',
                         icon: 'pi pi-phone',
                         command: () => {
-                           
+                           this.router.navigate(['/admin/institute-management/followup']);
                         }
                     },
                     {
