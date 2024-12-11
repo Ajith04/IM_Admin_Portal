@@ -253,11 +253,11 @@
       </ng-template>
   
       
-      <ng-template pTemplate="rowexpansion" let-allCourses>
+      <ng-template pTemplate="rowexpansion" let-allStudents>
         <tr>
           <td colspan="10">
             <div class="">
-              <p-table [value]="allCourses.courseLevel" dataKey="courseId" >
+              <p-table [value]="allStudents.studentCourseLevelResponses" dataKey="courseId" >
                 <ng-template pTemplate="header">
                   <tr>
                   <th style="width: 5rem;"></th>
@@ -267,44 +267,22 @@
                     <th>Duration</th>
                     <th>Course Fee</th>
                     <th>Instructor</th>
+                    <th>Assigned Date</th>
                   </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-courseLevel>
+                <ng-template pTemplate="body" let-studentCourseLevelResponses>
                   <tr>
                       <td style="width: 5rem;"></td>
-                    <td>{{ courseLevel.courseId }}</td>
-                    <td>{{ courseLevel.levelName }}</td>
-                    <td>{{courseLevel.createdDate | date:'dd/MMM/yyyy'}}</td>
-                    <td>{{ courseLevel.duration }}</td>
+                    <td>{{ studentCourseLevelResponses.courseId }}</td>
+                    <td>{{ studentCourseLevelResponses.courseName }}</td>
+                    <td>{{studentCourseLevelResponses.levelName}}</td>
+                    <td>{{ studentCourseLevelResponses.duration }}</td>
                     <td>
-                      {{ courseLevel.courseFee | currency : "Rs " }}
+                      {{ studentCourseLevelResponses.courseFee | currency : "Rs " }}
                     </td>
-                    <td><p-rating [readonly]="true" [cancel]="false" /></td>
-                    <td>
-                      <span
-                        *ngIf="
-                          courseLevel?.instructorResponses &&
-                          courseLevel.instructorResponses.length > 0;
-                          else noInstructors
-                        "
-                      >
-                        <ng-container
-                          *ngFor="
-                            let instructor of courseLevel.instructorResponses
-                          "
-                        >
-                          <p-tag
-                            [value]="instructor.instructorName"
-                            class="mr-2 mb-2"
-                          ></p-tag>
-                        </ng-container>
-                      </span>
-  
-                      <ng-template #noInstructors>
-                        <span>No instructors assigned</span>
-                      </ng-template>
-                    </td>
-                    <td></td>
+                    <td>{{studentCourseLevelResponses.instructor}}</td>
+                    <td>{{studentCourseLevelResponses.enrolledDate | date : 'dd/MMM/yyyy'}}</td>
+                    
                   </tr>
                 </ng-template>
                 <ng-template pTemplate="emptymessage">

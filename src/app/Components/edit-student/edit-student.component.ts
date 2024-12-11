@@ -15,12 +15,17 @@ import { ToastModule } from 'primeng/toast';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { AssignInstructor, CourseService, getInsructor, InstructorForCourse, singleCourseLevel, updateCourseData } from '../../Services/course.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AssignBatch, BatchForStudent, Student, StudentService, updateSingleStudent } from '../../Services/student.service';
+import { AssignBatch, BatchForStudent, CourseEnrollment, CourseForStudent, CourseLevelForStudent, Student, StudentService, updateSingleStudent } from '../../Services/student.service';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { DialogModule } from 'primeng/dialog';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { CalendarModule } from 'primeng/calendar';
+import { FloatLabelModule } from 'primeng/floatlabel';
 
 @Component({
   selector: 'app-edit-student',
   standalone: true,
-  imports: [FieldsetModule, AvatarModule, FormsModule, InputTextModule, EditorModule, ButtonModule, DragDropModule, CommonModule, FormsModule, ToggleButtonModule, InputSwitchModule, TagModule, ToastModule, ConfirmDialogModule],
+  imports: [FieldsetModule, AvatarModule, FormsModule, InputTextModule, EditorModule, ButtonModule, DragDropModule, CommonModule, FormsModule, ToggleButtonModule, InputSwitchModule, TagModule, ToastModule, ConfirmDialogModule, ConfirmPopupModule, DialogModule, RadioButtonModule, CalendarModule, FloatLabelModule],
   providers: [ConfirmationService, MessageService],
   templateUrl: './edit-student.component.html',
   styleUrl: './edit-student.component.css'
@@ -36,11 +41,22 @@ export class EditStudentComponent implements OnInit{
   isDisabled:boolean = true;
   editorClass:string = 'pointer-events-none';
   editBtnText: string = 'Edit mode is Off';
+  regFeePaid: boolean = false;
+  showCourseInstructor: boolean = false;
 
   formData: updateSingleStudent = {
       mobile: '',
       email: '',
       address: ''          
+  }
+
+  courseEnrollment: CourseEnrollment = {
+  studentId: '',
+  courseId: '',
+  instructorId: 0,
+  courseFee: 0,
+  duration: '',
+  enrollmentDate:''
   }
 
   assignBatch: AssignBatch = {
@@ -58,9 +74,11 @@ checked: boolean = false;
 
 allInstructors: InstructorForCourse[] = [];
 selectedInstructor: getInsructor[] = [];
-draggedInstructor: InstructorForCourse | undefined | null;
+draggedCourseLevel: CourseLevelForStudent | undefined | null;
 draggedBatch: BatchForStudent | undefined | null;
 batchForStudent: BatchForStudent[] = [];
+coursesForStudent: CourseForStudent[] = [];
+
 
 singleStudent: Student |undefined;
 
@@ -75,7 +93,7 @@ ngOnInit() {
 
     this.getSingleStudent();
 
-    this.getInstructorForCourse();
+    this.getCoursesForStudent();
     this.getBatchForStudent();
     
     this.getAssignedInstructor();
@@ -88,15 +106,36 @@ getBatchForStudent(){
   this.studentService.getBatchForStudent(this.studentId).subscribe({next:(data: BatchForStudent[]) => {this.batchForStudent = data;}});
 }
 
-getInstructorForCourse(){
-  this.courseService.getInstructorForCourse(this.studentId).subscribe({next:(data: InstructorForCourse[]) => {this.allInstructors = data;}});
+getCoursesForStudent(){
+  this.studentService.getCoursesForStudent(this.studentId).subscribe({next:(data: CourseForStudent[]) => {this.coursesForStudent = data;}});
 }
 
 
 
 
-dragStart(instructor: InstructorForCourse) {
-    this.draggedInstructor = instructor;
+
+
+courseDragStart(courseLevel: CourseLevelForStudent) {
+    this.draggedCourseLevel = courseLevel;
+
+  this.courseEnrollment.studentId = this.studentId;
+  this.courseEnrollment.courseId = this.draggedCourseLevel?.levelId;
+  this.courseEnrollment.courseFee =  this.draggedCourseLevel?.courseFee
+  this.courseEnrollment.duration = this.draggedCourseLevel?.duration
+}
+
+sendCourseEnrollment(){
+
+  this.studentService.sendCourseEnrollment(this.courseEnrollment).subscribe({
+    next: () => {
+      this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Course Assigned.' });
+     
+    },
+    error: () => {
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to assign Course.' });
+    }
+  });
+  this.showCourseInstructor = false;
 }
 
 batchDragStart(batch: BatchForStudent) {
@@ -104,34 +143,46 @@ batchDragStart(batch: BatchForStudent) {
 }
 
 
-drop(event: Event) {
-      this.confirmationService.confirm({
-        target: event.target as EventTarget,
-        message: 'Are you sure that you want to proceed?',
-        header: 'Confirmation',
-        icon: 'pi pi-exclamation-triangle',
-        acceptIcon:"none",
-        rejectIcon:"none",
-        rejectButtonStyleClass:"p-button-text",
-        accept: () => {
-          this.assignInstructor.courseId = this.studentId;
-          this.assignInstructor.instructorId = this.draggedInstructor?.instructorId;
- 
-          this.courseService.instructorToCourse(this.assignInstructor).subscribe({
-           next: () => {
-             this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Instructor Assigned!' });
-             this.getSingleStudent();
-             this.getBatchForStudent();
-           },
-           error: () => {
-             this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to assign Instructor.' });
-           }
-         });
-        },
-        reject: () => {
-            
-        }
-    });
+
+
+async courseDrop(event: Event) {
+  
+
+  this.studentService.checkRegFee(this.studentId).subscribe({
+    next: (data: boolean) => {
+      this.regFeePaid = data;
+      
+      if(this.regFeePaid == false){
+        this.confirmationService.confirm({
+          target: event.target as EventTarget,
+          message: 'This Student has not yet paid the Registration Fee.',
+          icon: 'pi pi-exclamation-circle',
+          acceptIcon: 'pi pi-money-bill mr-1',
+          rejectIcon: 'pi pi-times mr-1',
+          acceptLabel: 'Pay Registration Fee',
+          rejectLabel: 'Cancel',
+          rejectButtonStyleClass: 'p-button-outlined p-button-sm',
+          acceptButtonStyleClass: 'p-button-sm',
+          accept: () => {
+              this.router.navigate(['admin/payments']);
+          },
+          reject: () => {
+              this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'The Course has not been assigned', life: 3000 });
+          }
+      });
+
+      }else{
+            this.showCourseInstructor = true;
+
+          }
+
+
+    }});
+  
+    
+
+      
+      
     }
 
 
@@ -220,7 +271,7 @@ deleteEnrollment(event: Event, enrollmentId:number){
        next: () => {
          this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Instructor Removed!' });
          this.getAssignedInstructor();
-         this.getInstructorForCourse();
+         this.getCoursesForStudent();
         
        },
        error: () => {

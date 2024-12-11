@@ -198,6 +198,7 @@ addFollowup() {
           next: () => {
             this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Student Registered.' });
             this.addNewStudentPopup = false;
+            this.getAllStudents();
             setTimeout(() => {this.router.navigate(['admin/payments'])}, 2000);
             
           },

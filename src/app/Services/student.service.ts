@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 
 
 @Injectable({
@@ -43,6 +44,48 @@ export class StudentService {
     return this.http.post<AssignBatch>(this.url + '/add-student-batch-enrollment', data);
   }
 
+  getCoursesForStudent(id: string){
+    return this.http.get<CourseForStudent[]>(this.url + `/get-courses-for-student/${id}`);
+  }
+
+  checkRegFee(studentId: string): Observable<boolean> {
+    return this.http.get<boolean>(this.url + `/check-reg-fee/${studentId}`);
+  }
+
+  sendCourseEnrollment(data: CourseEnrollment){
+    return this.http.post<CourseEnrollment>(this.url + '/add-student-course-enrollment', data);
+  }
+  
+
+}
+
+export interface CourseEnrollment{
+  studentId: string;
+  courseId: string;
+  instructorId: number;
+  courseFee: number;
+  duration: string;
+  enrollmentDate: string;
+}
+
+export interface CourseForStudent{
+  mainCourseName: string;
+  courseLevels: CourseLevelForStudent[]
+}
+
+export interface CourseLevelForStudent{
+  levelId: string;
+  levelName: string;
+  courseFee: number;
+  duration: string;
+  courseImages: File[];
+  instructors: Instructor[];
+}
+
+export interface Instructor{
+  instructorId: number;
+  name: string;
+  avatar: File
 }
 
 export interface AssignBatch{
@@ -71,7 +114,18 @@ export interface Student{
   email: string;
   address: string;
   intake: string;
+  studentCourseLevelResponses: StudentCourseLevel[];
 
+}
+
+export interface StudentCourseLevel{
+courseId: string;
+courseName: string;
+levelName: string;
+duration: string;
+courseFee: number;
+instructor: string;
+enrolledDate: string;
 }
 
 export interface NewFollowUp{

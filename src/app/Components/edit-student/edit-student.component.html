@@ -1,5 +1,6 @@
 <div class="card flex justify-content-center m-5">
     <p-confirmDialog />
+    
     <p-toast />
     <p-fieldset [toggleable]="true">
         <ng-template pTemplate="header">
@@ -113,28 +114,44 @@
         <div class="card flex flex-wrap gap-3">
             <div class="p-2 border-1 surface-border border-round w-35rem">
                 <p class="text-center surface-border border-bottom-1 font-semibold">Courses</p>
-                <div class="flex gap-2 p-0 m-0 flex-wrap">
-                    <div 
-                        *ngFor="let instructor of allInstructors" 
-                        class="p-2 border-round shadow-1 flex flex-column justify-content-center align-items-center"
+                <div class="flex flex-column gap-2 p-0 m-0">
+                    <div *ngFor="let mainCourse of coursesForStudent" class="flex flex-column">
+                        <h5>{{mainCourse.mainCourseName}}</h5>
+                        <div class="flex gap-3">
+                        <div 
+                        *ngFor="let courseLevel of mainCourse.courseLevels let i = index" 
+                        class="p-2 border-round shadow-1 flex flex-column"
                         pDraggable 
-                        (onDragStart)="dragStart(instructor)" 
+                        (onDragStart)="courseDragStart(courseLevel)" 
                         
                         >
-                            <img [src]="'data:image/jpeg;base64,'+ instructor.avatar" alt="" width="100">
-                            <h3 class="text-center">{{instructor.instructorName}}</h3>
-                            <div class="flex flex-wrap">
-                                <p-tag *ngFor="let singleCourse of instructor.instructorCourseNameResponses"
-                                [value]="singleCourse.name"
-                                class="mx-1">
-                                
-                                </p-tag>
-                            </div>
+                    
+                            <img [src]="'data:image/jpeg;base64,'+ courseLevel.courseImages[i]" alt="" height="100">
+                            <span class="text-center">
+                                <p class="font-semibold mt21">Level</p>
+                                <p class="m-0">{{courseLevel.levelName}}</p>
+                            </span>
+
+                            <span class="text-center">
+                                <p class="font-semibold">Course Fee</p>
+                                <p class="m-0">{{courseLevel.courseFee | currency : 'Rs. '}}</p>
+                            </span>
+
+                            <span class="text-center">
+                                <p class="font-semibold">Duration</p>
+                                <p class="m-0">{{courseLevel.duration}}</p>
+                            </span>
+                            
+                        </div>
+
+                            
                 </div>
+                    </div>
+                    
                 </div>
             </div>
             
-            <div class="p-2 border-1 surface-border border-round w-35rem" pDroppable (onDrop)="drop($event)">
+            <div class="p-2 border-1 surface-border border-round w-35rem" pDroppable (onDrop)="courseDrop($event)">
                 <p class="text-center surface-border border-bottom-1 font-semibold">{{singleStudent?.studentId}} - {{singleStudent?.firstName}}</p>
                 <div class="flex flex-wrap gap-2 p-0 m-0" *ngIf="selectedInstructor.length > 0; else noInstructors">
                     <div *ngFor="let instructor of selectedInstructor"
@@ -159,6 +176,14 @@
         
     </p-fieldset>
 </div>
+
+
+    <ng-template pTemplate="content" let-message>
+        <div class="flex flex-column align-items-center w-full gap-3 border-bottom-1 surface-border p-3 mb-3">
+            <i [class]="message.icon" class="text-6xl text-primary-500"></i>
+        </div>
+    </ng-template>
+
 
 
 <div class="card flex justify-content-center m-5">
@@ -215,3 +240,41 @@
     </div>
     </p-fieldset>
 </div>
+
+<p-dialog header="Select Instructor" [modal]="true" [(visible)]="showCourseInstructor" [style]="{ width: '25rem' }">
+    <div class="flex flex-column gap-3">
+        <div *ngFor="let mainCourse of coursesForStudent">
+            <div *ngFor="let courseLevel of mainCourse.courseLevels">
+        <div *ngFor="let instructor of courseLevel.instructors" class="field-checkbox card flex">
+            <span [style]="{ width: '5rem' }" class="mr-5">
+            <img [src]="'data:image/jpeg;base64,'+ instructor.avatar" height="50px">
+            </span>
+            <p-radioButton 
+                name="category" 
+                [value]="instructor.instructorId" 
+                [(ngModel)] = "courseEnrollment.instructorId"
+                 />
+            <label class="ml-2">
+                {{ instructor.name }}
+            </label>
+        </div>
+    </div>
+    </div>
+    <div class="flex justify-content-center mb-5">
+        <p-floatLabel>
+    <p-calendar 
+    [(ngModel)]="courseEnrollment.enrollmentDate" 
+    [showIcon]="true" 
+    [showOnFocus]="false" 
+    inputId="buttondisplay"
+    />
+    <label for="birth_date">Assign Date</label></p-floatLabel>
+    </div>
+    </div>
+    
+    
+    <div class="flex justify-content-end gap-2">
+        <p-button label="Cancel" severity="secondary" (onClick)="showCourseInstructor = false" />
+        <p-button label="Assign" (onClick)="sendCourseEnrollment()" />
+    </div>
+</p-dialog>
