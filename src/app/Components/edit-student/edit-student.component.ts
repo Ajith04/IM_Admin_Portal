@@ -15,7 +15,7 @@ import { ToastModule } from 'primeng/toast';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { AssignInstructor, CourseService, getInsructor, InstructorForCourse, singleCourseLevel, updateCourseData } from '../../Services/course.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AssignBatch, BatchForStudent, CourseEnrollment, CourseForStudent, CourseLevelForStudent, Student, StudentService, updateSingleStudent } from '../../Services/student.service';
+import { AssignBatch, BatchForStudent, CourseEnrollment, CourseForStudent, CourseLevelForStudent, SingleStudent, Student, StudentService, updateSingleStudent } from '../../Services/student.service';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { DialogModule } from 'primeng/dialog';
 import { RadioButtonModule } from 'primeng/radiobutton';
@@ -80,7 +80,7 @@ batchForStudent: BatchForStudent[] = [];
 coursesForStudent: CourseForStudent[] = [];
 
 
-singleStudent: Student |undefined;
+singleStudent: SingleStudent | undefined;
 
 
 ngOnInit() {
@@ -129,6 +129,8 @@ sendCourseEnrollment(){
   this.studentService.sendCourseEnrollment(this.courseEnrollment).subscribe({
     next: () => {
       this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Course Assigned.' });
+      this.getCoursesForStudent();
+      this.getSingleStudent();
      
     },
     error: () => {
@@ -203,8 +205,9 @@ async courseDrop(event: Event) {
           this.studentService.batchToStudent(this.assignBatch).subscribe({
            next: () => {
              this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Batch Assigned!' });
+             this.getSingleStudent();
              this.getBatchForStudent();
-             this.getAssignedInstructor();
+             
              
            },
            error: () => {
@@ -220,7 +223,7 @@ async courseDrop(event: Event) {
 
 
 getSingleStudent(){
-  this.studentService.getSingleStudent(this.studentId).subscribe({next:(data: Student) => {this.singleStudent = data;
+  this.studentService.getSingleStudent(this.studentId).subscribe({next:(data: SingleStudent) => {this.singleStudent = data;
       this.formData.mobile = this.singleStudent?.mobileNo;
       this.formData.email = this.singleStudent?.email;
       this.formData.address = this.singleStudent?.address;
@@ -257,7 +260,7 @@ getAssignedInstructor(){
 
 }
 
-deleteEnrollment(event: Event, enrollmentId:number){
+deleteCourseEnrollment(event: Event, enrollmentId:number){
   this.confirmationService.confirm({
     target: event.target as EventTarget,
     message: 'Are you sure that you want to proceed?',
@@ -267,15 +270,15 @@ deleteEnrollment(event: Event, enrollmentId:number){
     rejectIcon:"none",
     rejectButtonStyleClass:"p-button-text",
     accept: () => {
-      this.courseService.deleteEnrollment(enrollmentId).subscribe({
+      this.studentService.deleteCourseEnrollment(enrollmentId).subscribe({
        next: () => {
-         this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Instructor Removed!' });
-         this.getAssignedInstructor();
+         this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Course enrollment Removed!' });
+         this.getSingleStudent();
          this.getCoursesForStudent();
         
        },
        error: () => {
-         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to remove Instructor.' });
+         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to remove Course enrollment.' });
        }
      });
     },
@@ -285,6 +288,43 @@ deleteEnrollment(event: Event, enrollmentId:number){
 });
 
 }
+
+
+
+
+
+deleteBatchEnrollment(event: Event, enrollmentId:number){
+  this.confirmationService.confirm({
+    target: event.target as EventTarget,
+    message: 'Are you sure that you want to proceed?',
+    header: 'Confirmation',
+    icon: 'pi pi-exclamation-triangle',
+    acceptIcon:"none",
+    rejectIcon:"none",
+    rejectButtonStyleClass:"p-button-text",
+    accept: () => {
+      this.studentService.deleteBatchEnrollment(enrollmentId).subscribe({
+       next: () => {
+         this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Batch Enrollment Removed!' });
+         this.getSingleStudent();
+         this.getBatchForStudent();
+         
+        
+       },
+       error: () => {
+         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to remove Batch enrollment.' });
+       }
+     });
+    },
+    reject: () => {
+        
+    }
+});
+
+}
+
+
+
 
 deleteStudent(event: Event, studentId: string){
 

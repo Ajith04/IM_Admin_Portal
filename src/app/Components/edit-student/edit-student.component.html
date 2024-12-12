@@ -153,24 +153,24 @@
             
             <div class="p-2 border-1 surface-border border-round w-35rem" pDroppable (onDrop)="courseDrop($event)">
                 <p class="text-center surface-border border-bottom-1 font-semibold">{{singleStudent?.studentId}} - {{singleStudent?.firstName}}</p>
-                <div class="flex flex-wrap gap-2 p-0 m-0" *ngIf="selectedInstructor.length > 0; else noInstructors">
-                    <div *ngFor="let instructor of selectedInstructor"
+                <div class="flex flex-wrap gap-2 p-0 m-0" *ngIf="singleStudent != null; else noCourses">
+                    <div *ngFor="let course of singleStudent.singleStudentCourseLevelResponses"
                         class="p-2 border-round shadow-1 flex flex-column justify-content-center align-items-center">
                         <div class="flex align-self-end">
-                            <p-button icon="pi pi-times" [rounded]="true" severity="danger" (onClick)="deleteEnrollment($event, instructor.enrollmentId)"/>
+                            <p-button icon="pi pi-times" [rounded]="true" severity="danger" (onClick)="deleteCourseEnrollment($event, course.courseEnrollmentId)"/>
                         </div>
-                            <img [src]="'data:image/jpeg;base64,'+ instructor.avatar" alt="" width="100">
-                            <h3 class="text-center">{{instructor.instructorName}}</h3>
+                            <img [src]="'data:image/jpeg;base64,'+ course.courseImage" alt="" width="100">
+                            <h3 class="text-center">{{course.courseName}} - {{course.levelName}}</h3>
                             <div class="flex flex-wrap">
-                                <p-tag *ngFor="let singleCourse of instructor.instructorKnowCourses"
-                                [value]="singleCourse.name"
-                                class="mx-1">
+                                <p-tag
+                                [value]="course.instructorName"
+                                class="mx-1 mb-2">
                                 
                                 </p-tag>
                             </div>
                 </div>
                 </div>
-                <ng-template #noInstructors><div class="w-20rem text-center flex align-items-center h-10rem">No instructors have been assigned to this course level. Drag and drop an instructor to assign to this course level.</div></ng-template>
+                <ng-template #noCourses><div class="w-20rem text-center flex align-items-center h-10rem">No Courses have been assigned to this Student. Drag and drop  course to assign to this Student.</div></ng-template>
             </div>
         </div>
         
@@ -200,31 +200,26 @@
                         pDraggable 
                         (onDragStart)="batchDragStart(batch)" 
                         >
+                        
                             {{batch.batchName}}
+                            
                     </li>
                 </ul>
             </div>
             
             <div class="p-2 border-1 surface-border border-round w-35rem" pDroppable (onDrop)="batchDrop($event)">
                 <p class="text-center surface-border border-bottom-1 font-semibold">{{singleStudent?.studentId}} - {{singleStudent?.firstName}}</p>
-                <div class="flex flex-wrap gap-2 p-0 m-0" *ngIf="selectedInstructor.length > 0; else noInstructors">
-                    <div *ngFor="let instructor of selectedInstructor"
-                        class="p-2 border-round shadow-1 flex flex-column justify-content-center align-items-center">
-                        <div class="flex align-self-end">
-                            <p-button icon="pi pi-times" [rounded]="true" severity="danger" (onClick)="deleteEnrollment($event, instructor.enrollmentId)"/>
-                        </div>
-                            <img [src]="'data:image/jpeg;base64,'+ instructor.avatar" alt="" width="100">
-                            <h3 class="text-center">{{instructor.instructorName}}</h3>
-                            <div class="flex flex-wrap">
-                                <p-tag *ngFor="let singleCourse of instructor.instructorKnowCourses"
-                                [value]="singleCourse.name"
-                                class="mx-1">
-                                
-                                </p-tag>
+                
+                <ul class="list-none flex flex-column gap-2 p-0 m-0">
+                    <li class="p-2 border-round shadow-1 flex" *ngIf="singleStudent?.batch">
+                            {{singleStudent?.batch}}
+                            <div class="flex align-self-end">
+                                <p-button icon="pi pi-times" [rounded]="true" severity="danger" (onClick)="deleteBatchEnrollment($event, singleStudent?.batchEnrollmentId ?? 0)"/>
                             </div>
-                </div>
-                </div>
-                <ng-template #noInstructors><div class="w-20rem text-center flex align-items-center h-10rem">No Batches have been assigned to this Student. Drag and drop a Batch to assign to this Student.</div></ng-template>
+                    </li>
+                </ul>
+                
+                <ng-template #noBatch><div class="w-20rem text-center flex align-items-center h-10rem">No Batches have been assigned to this Student. Drag and drop a Batch to assign to this Student.</div></ng-template>
             </div>
         </div>
         

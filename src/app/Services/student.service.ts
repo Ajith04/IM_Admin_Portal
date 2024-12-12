@@ -25,7 +25,7 @@ export class StudentService {
   }
 
   getSingleStudent(id: string){
-    return this.http.get<Student>(this.url + `/get-single-student/${id}`);
+    return this.http.get<SingleStudent>(this.url + `/get-single-student/${id}`);
   }
 
   updateSingleCourse(id: string, formData: updateSingleStudent){
@@ -55,9 +55,43 @@ export class StudentService {
   sendCourseEnrollment(data: CourseEnrollment){
     return this.http.post<CourseEnrollment>(this.url + '/add-student-course-enrollment', data);
   }
+
+  deleteCourseEnrollment(id: number){
+    return this.http.delete(this.url + `/delete-course-enrollment/${id}`);
+  }
+
+  deleteBatchEnrollment(id: number){
+    return this.http.delete(this.url + `/delete-batch-enrollment/${id}`);
+  }
   
 
 }
+
+
+export interface SingleStudent{
+  studentId: string;
+  firstName: string;
+  lastName: string;
+  dateOfJoin: string;
+  mobileNo: string;
+  email: string;
+  address: string;
+  batch: string;
+  intake: string;
+  batchEnrollmentId: number;
+  singleStudentCourseLevelResponses: SingleStudentCourseLevel[];
+
+}
+
+export interface SingleStudentCourseLevel{
+  courseEnrollmentId: number;
+  courseImage: File;
+  courseName: string;
+  levelName: string;
+  instructorName: string;
+}
+
+
 
 export interface CourseEnrollment{
   studentId: string;
@@ -114,6 +148,7 @@ export interface Student{
   email: string;
   address: string;
   intake: string;
+  batch: string;
   studentCourseLevelResponses: StudentCourseLevel[];
 
 }

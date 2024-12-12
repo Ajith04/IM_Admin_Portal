@@ -220,7 +220,8 @@
           <th>Joined Date</th>              
           <th>Mobile No</th>              
           <th>Email</th>              
-          <th>Address</th>  
+          <th>Address</th> 
+          <th>Batch</th> 
           <th>Intake</th>  
           <th>Edit</th>      
           </tr>
@@ -247,6 +248,7 @@
           <td>{{allStudents.mobileNo}}</td>
           <td>{{allStudents.email}}</td>
           <td>{{allStudents.address}}</td>
+          <td>{{allStudents.batch ? allStudents.batch : 'No batch assigned yet'}}</td>
           <td>{{allStudents.intake}}</td>
           <td><p-button type="button" icon="pi pi-pen-to-square" [routerLink]="['/admin/student-management/edit-student', allStudents.studentId]"/></td>
         </tr>
