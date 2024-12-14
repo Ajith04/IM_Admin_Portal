@@ -63,8 +63,19 @@ export class StudentService {
   deleteBatchEnrollment(id: number){
     return this.http.delete(this.url + `/delete-batch-enrollment/${id}`);
   }
+
+  getEnrollments(){
+    return this.http.get<enrollments[]>(this.url + '/get-enrollments');
+  }
   
 
+}
+
+export interface enrollments{
+  studentId: string;
+  studentName: string;
+  course: string;
+  enrollDate: string;
 }
 
 

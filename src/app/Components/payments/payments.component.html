@@ -1,1 +1,135 @@
-<p>Payments works!</p>
+<p-confirmDialog />
+
+<p-toast />
+
+<div class="card flex flex-column justify-content-center m-5 p-3 mt-2">
+  <div class="card flex justify-content-end gap-3 mb-5">
+    <p-floatLabel>
+      <input pInputText id="search" [(ngModel)]="searchStudenId" />
+      <label for="search">Search by Student ID</label>
+    </p-floatLabel>
+    <p-button icon="pi pi-search" severity="info" (onClick)="searchStudent()"/>
+  </div>
+
+
+    <div class="card flex flex-column justify-content-center shadow-1 border-round gap-3 mb-5 p-3"
+    *ngIf="visible && studentWithCourses">
+      <div class="flex justify-content-end gap-8">
+        <div class="gap-3 flex align-items-center">
+            <p-button label="view payment history" [text]="true" (onClick)="getPaymentHistory(studentWithCourses.studentId)"/>
+        </div>
+        <p-button
+          icon="pi pi-times"
+          severity="danger"
+          (onClick)="closeSearchResult()"
+        />
+      </div>
+      <div class="mx-3" *ngIf="studentWithCourses">
+        <div class="flex gap-5" >
+          <span>
+            <p class="font-semibold">Student Id</p>
+            <p></p>
+            <p>{{studentWithCourses.studentId}}</p>
+          </span>
+          <span>
+            <p class="font-semibold">Name</p>
+            <p>{{studentWithCourses.firstName}}</p>
+          </span>
+        </div>
+        <div class="flex gap-5 align-items-center justify-content-center">
+            <div class="flex flex-column" *ngIf="studentWithCourses.enrolledCourses.length > 0; else noEnrollments">
+            <div class="flex gap-5 w-full">
+                <span class="w-8rem"><p class="font-semibold">Course Id</p></span>
+                <span class="w-8rem"><p class="font-semibold">Course Name</p></span>
+                <span class="w-8rem"><p class="font-semibold">Total Course Fee</p></span>
+                <span class="w-8rem"><p class="font-semibold">Payable Amount</p></span>
+               
+            </div>
+            
+            <div class="flex gap-5 mb-3 w-full shadow-1 border-round p-2 align-items-center" *ngFor="let course of studentWithCourses?.enrolledCourses">
+                <span class="w-8rem">{{course.courseId}}</span>
+                <span class="w-8rem">{{course.courseName}}</span>
+                <span class="w-8rem">{{course.courseFee | currency : 'Rs. '}}</span>
+                <span class="w-8rem text-red-500">{{course.payableAmount | currency : 'Rs. '}}</span>
+                <span class=""><input type="text" pInputText placeholder="Enter amount..." [(ngModel)]="course.singlePayment.amount"/></span>
+                <span class="">
+                    <p-calendar
+                      [showIcon]="true"
+                      [showOnFocus]="false"
+                      inputId="buttondisplay"
+                      placeholder="Select Date"
+                      [(ngModel)]="course.singlePayment.date"
+                    />
+                  </span>
+                  <span class="">
+                    <p-button icon="pi pi-plus" severity="success" (onClick)="sendSinglePayment($event, course)"/>
+                  </span>
+            </div>
+            </div>
+
+            <ng-template #noEnrollments>
+                <div>
+                    <p>No any course enrollments for this student</p>
+                </div>
+            </ng-template>
+
+        </div>
+      </div>      
+    </div>
+    
+
+
+    <div *ngIf="paymentHistory.length > 0">
+        <div class="card">
+            <p-table [value]="paymentHistory" [tableStyle]="{ 'min-width': '50rem' }">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Course Name</th>
+                        <th>Paid Amount</th>
+                        <th>Paid Date</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-paymentHistory>
+                    <tr>
+                        <td>{{ paymentHistory.courseName }}</td>
+                        <td>{{ paymentHistory.amount }}</td>
+                        <td>{{ paymentHistory.date | date : 'dd/MMM/yyyy' }}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+
+
+
+
+
+
+  <div
+    class="card flex flex-column justify-content-center m-2 shadow-1 border-round p-3"
+  >
+    <h3 class="text-left">Registration Fee Due</h3>
+    <div *ngIf="notRegFeeStudents; else noRecord">
+      <div
+        class="flex justify-content-center align-items-center bg-red-300 p-2 shadow-1 border-round custom-card m-2"
+        *ngFor="let student of notRegFeeStudents"
+      >
+        <span class="mr-1">{{ student.studentId }}</span>
+        <span class="mr-5 text-white"
+          >has just added as a new student. Please pay registration fee for
+          assign courses.</span
+        >
+        <p-button
+          label="Pay now"
+          [raised]="true"
+          (onClick)="onClick($event, student.studentId)"
+        />
+      </div>
+    </div>
+    <ng-template #noRecord>
+      <div>
+        <p>No Students with pending Registration payment.</p>
+      </div>
+    </ng-template>
+  </div>
+</div>
