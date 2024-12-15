@@ -6,12 +6,13 @@ import { InputTextModule } from 'primeng/inputtext';
 import { InputOtpModule } from 'primeng/inputotp';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
-import { AccountNames, AddAccount, AuthService, Login, Roles } from '../../Services/auth.service';
+import { AccountNames, AddAccount, AuthService, Login, Roles, TokenResponse } from '../../Services/auth.service';
 import { FormsModule } from '@angular/forms';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { Router, RouterModule } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -107,15 +108,15 @@ export class LoginComponent implements OnInit{
   }
 
   loginRequest(){
-    this.login.mailId = this.sendMailId.mailId
+    this.login.mailId = this.sendMailId.mailId;
     this.authService.loginRequest(this.login).subscribe({
-      next: (token: string) => {
-        localStorage.setItem('token', token);
+      next: (tokenResponse: TokenResponse) => {
+        localStorage.setItem('token', tokenResponse.token);
         this.router.navigate(['/admin']);
         this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Login Successfull' });
       },
-      error: () => {
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to login.' });
+      error: (error: HttpErrorResponse) => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error });
       }
     });
   }

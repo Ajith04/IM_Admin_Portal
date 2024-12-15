@@ -27,9 +27,14 @@ export class AuthService {
     return this.http.patch<AccountNames>(this.url + '/add-password', data);
   }
 
-  loginRequest(data: Login): Observable<string>{
-    return this.http.post<string>(this.url + '/login', data);
+  loginRequest(data: Login) {
+    return this.http.post<TokenResponse>(this.url + '/login', data);
   }
+  
+}
+
+export interface TokenResponse{
+  token: string;
 }
 
 export interface Login{
