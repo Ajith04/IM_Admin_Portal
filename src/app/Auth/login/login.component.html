@@ -1,1 +1,72 @@
-<p>login works!</p>
+<p-confirmDialog />
+
+<p-toast />
+
+<div class="flex justify-content-center align-items-center h-screen">
+  <div header="" class="shadow-1 border-round p-5 w-30rem">
+    <div class="flex justify-content-center flex-column">
+      <h3 class="p-text-secondary block mb-5 text-center">
+        Login to Admin Portal
+      </h3>
+      <div class="flex align-items-center gap-3 mb-2">
+        <label for="username" class="font-semibold w-6rem">Email</label>
+        <p-dropdown
+        [(ngModel)] = "sendMailId.mailId"
+          [options]="accountNames"
+          optionValue="mailId"
+          optionLabel="mailId"
+          placeholder="Select your mail ID"
+        />
+        <p-button
+          label="send OTP"
+          [raised]="true"
+          severity="success"
+          (onClick)="addPassword()"
+        />
+      </div>
+      <div class="flex align-items-center mb-2">
+        <label for="email" class="font-semibold w-6rem">OTP</label>
+        <p-inputOtp [integerOnly]="true" [(ngModel)]="login.otp"/>
+      </div>
+
+      <div class="flex align-items-center mt-3 mb-3 justify-content-center">
+        <p for="email" class="font-semibold">Don't have an account?</p>
+        <p-button label="Create an account" [text]="true" class="ml-2" (onClick)="openSignUp()"/>
+      </div>
+
+      <div class="flex justify-content-end gap-2 mt-2">
+        <p-button label="Reset" severity="secondary" type="reset" />
+        <p-button label="Login" (onClick)="loginRequest()"/>
+      </div>
+
+    </div>
+
+    
+  </div>
+</div>
+
+
+
+<p-dialog header="Register your Mail ID" [modal]="true" [(visible)]="signupModelVisible" [style]="{ width: '25rem' }">
+    <div class="flex align-items-center gap-3 mb-3 mt-1">
+        <label for="username" class="font-semibold w-6rem">Mail ID</label>
+        <p-iconField iconPosition="left">
+            <p-inputIcon styleClass="pi pi-envelope" />
+            <input type="text" pInputText placeholder="Enter your Mail ID" [(ngModel)]="addAccount.email"/>
+        </p-iconField>
+    </div>
+    <div class="flex align-items-center gap-1 mb-5">
+        <label for="email" class="font-semibold w-6rem">Role</label>
+        <p-dropdown
+        [(ngModel)]="addAccount.roleId"
+          [options]="allRoles"
+          optionLabel="roleName"
+          optionValue="roleId"
+          placeholder="Select your Role"
+        />
+    </div>
+    <div class="flex justify-content-end gap-2">
+        <p-button label="Cancel" severity="secondary" (onClick)="signupModelVisible = false" />
+        <p-button label="Register" (onClick)="registerAccount($event)"/>
+    </div>
+</p-dialog>
