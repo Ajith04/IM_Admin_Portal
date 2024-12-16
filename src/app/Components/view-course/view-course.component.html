@@ -182,7 +182,7 @@
       (onRowCollapse)="onRowCollapse($event)"
     >
 
-  
+
       <ng-template pTemplate="body" let-allCourses let-expanded="expanded">
         <tr>
           <td style="width: 5rem;">
@@ -208,6 +208,8 @@
           <td></td>
         </tr>
       </ng-template>
+
+
   
       
       <ng-template pTemplate="rowexpansion" let-allCourses>
@@ -264,7 +266,7 @@
                         <span>No instructors assigned</span>
                       </ng-template>
                     </td>
-                    <td><p-button type="button" icon="pi pi-pen-to-square" [routerLink]="['/admin/course-management/edit-course', courseLevel.courseId]"/></td>
+                    <td><p-button type="button" icon="pi pi-pen-to-square" [routerLink]="['/admin/id/course-management/edit-course', courseLevel.courseId]"/></td>
                   </tr>
                 </ng-template>
                 <ng-template pTemplate="emptymessage">

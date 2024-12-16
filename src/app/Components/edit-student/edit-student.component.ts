@@ -166,7 +166,7 @@ async courseDrop(event: Event) {
           rejectButtonStyleClass: 'p-button-outlined p-button-sm',
           acceptButtonStyleClass: 'p-button-sm',
           accept: () => {
-              this.router.navigate(['admin/payments']);
+              this.router.navigate(['admin/id/payments']);
           },
           reject: () => {
               this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'The Course has not been assigned', life: 3000 });
@@ -342,7 +342,7 @@ deleteStudent(event: Event, studentId: string){
          this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Student Removed!' });
          
          setTimeout(() => {
-          this.router.navigate(['/admin/student-management']);
+          this.router.navigate(['/admin/id/student-management']);
         }, 2000);
          
        },

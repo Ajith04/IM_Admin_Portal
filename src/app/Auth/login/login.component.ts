@@ -64,7 +64,7 @@ export class LoginComponent implements OnInit{
   registerAccount(event: Event){
     this.confirmationService.confirm({
       target: event.target as EventTarget,
-      message: 'You ar going to create a new account?',
+      message: 'You are going to create a new account!',
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       acceptIcon:"none",
@@ -112,8 +112,13 @@ export class LoginComponent implements OnInit{
     this.authService.loginRequest(this.login).subscribe({
       next: (tokenResponse: TokenResponse) => {
         localStorage.setItem('token', tokenResponse.token);
-        this.router.navigate(['/admin']);
         this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Login Successfull' });
+
+        setTimeout(() => {
+          this.router.navigate(['/admin', this.sendMailId.mailId]);
+       }, 2000);
+       
+
       },
       error: (error: HttpErrorResponse) => {
         this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error });

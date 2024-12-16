@@ -30,6 +30,10 @@ export class AuthService {
   loginRequest(data: Login) {
     return this.http.post<TokenResponse>(this.url + '/login', data);
   }
+
+  logout(id: AccountNames){
+    return this.http.patch<AccountNames>(this.url + '/logout', id);
+  }
   
 }
 

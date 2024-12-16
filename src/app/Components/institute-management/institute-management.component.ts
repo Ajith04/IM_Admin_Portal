@@ -85,28 +85,28 @@ export class InstituteManagementComponent {
                         label: 'Course Name',
                         icon: 'pi pi-at',
                         command: () => {
-                            this.router.navigate(['/admin/institute-management/course-name']);
+                            this.router.navigate(['/admin/id/institute-management/course-name']);
                         }
                     },
                     {
                         label: 'Course Category',
                         icon: 'pi pi-bars',
                         command: () => {
-                            this.router.navigate(['/admin/institute-management/course-category']);
+                            this.router.navigate(['/admin/id/institute-management/course-category']);
                         }
                     },
                     {
                         label: 'Course Level',
                         icon: 'pi pi-file-o',
                         command: () => {
-                            this.router.navigate(['/admin/institute-management/course-level']);
+                            this.router.navigate(['/admin/id/institute-management/course-level']);
                         }
                     },
                     {
                         label: 'Batch',
                         icon: 'pi pi-clone',
                         command: () => {
-                            this.router.navigate(['/admin/institute-management/batch']);
+                            this.router.navigate(['/admin/id/institute-management/batch']);
                         }
                     },
                     {
@@ -136,21 +136,21 @@ export class InstituteManagementComponent {
                         label: 'All Instructors',
                         icon: 'pi pi-user',
                         command: () => {
-                            this.router.navigate(['/admin/institute-management/instructor']);
+                            this.router.navigate(['/admin/id/institute-management/instructor']);
                         }
                     },
                     {
                         label: 'All Expenses',
                         icon: 'pi pi-wallet',
                         command: () => {
-                            this.router.navigate(['/admin/institute-management/expense']);
+                            this.router.navigate(['/admin/id/institute-management/expense']);
                         }
                     },
                     {
                         label: 'Follow-up List',
                         icon: 'pi pi-phone',
                         command: () => {
-                           this.router.navigate(['/admin/institute-management/followup']);
+                           this.router.navigate(['/admin/id/institute-management/followup']);
                         }
                     },
                     {
@@ -201,7 +201,7 @@ export class InstituteManagementComponent {
             this.imService.sendInstructor(formData).subscribe({next: () => {
                 this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Instructor added!' });
                 this.addInstructorVisible = false;
-                this.router.navigate(['/admin/institute-management/instructor']);
+                this.router.navigate(['/admin/id/institute-management/instructor']);
               },
               error: () => {
                 this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to add Instructor.' });

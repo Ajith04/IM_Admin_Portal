@@ -203,7 +203,7 @@ export class EditCourseComponent implements OnInit{
            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Course Level Removed!' });
            
            setTimeout(() => {
-            this.router.navigate(['/admin/course-management']);
+            this.router.navigate(['/admin/id/course-management']);
           }, 2000);
            
          },

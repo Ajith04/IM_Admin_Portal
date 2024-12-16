@@ -19,10 +19,12 @@ import { ExpenseComponent } from './Components/expense/expense.component';
 import { ViewStudentComponent } from './Components/view-student/view-student.component';
 import { EditStudentComponent } from './Components/edit-student/edit-student.component';
 import { FollowupComponent } from './Components/followup/followup.component';
+import { AdminGuard } from './Guards/admin.guard';
+import { StaffGuard } from './Guards/staff.guard';
 
 export const routes: Routes = [
     {path:'login', component:LoginComponent},
-    {path:'admin', component:AdminLayoutComponent,
+    {path:'admin/:id', component:AdminLayoutComponent, canActivate: [StaffGuard],
         children:[
             {path:'dashboard', component:DashboardComponent},
             {path:'student-management', component:StudentManagementComponent,
@@ -31,14 +33,14 @@ export const routes: Routes = [
                     {path:'edit-student/:id', component:EditStudentComponent}
                 ]
             },
-            {path:'course-management', component:CourseManagementComponent,
+            {path:'course-management', component:CourseManagementComponent, canActivate: [AdminGuard],
                 children:[
                     {path:'', component:ViewCourseComponent},
                     {path:'edit-course/:id', component:EditCourseComponent}
                 ]
             },
-            {path:'payments', component:PaymentsComponent},
-            {path:'institute-management', component:InstituteManagementComponent,
+            {path:'payments', component:PaymentsComponent, canActivate: [StaffGuard]},
+            {path:'institute-management', component:InstituteManagementComponent,canActivate: [AdminGuard],
                 children:[
                     {path:'course-name', component:AddCourseNameComponent},
                     {path:'course-category', component:AddCourseCategoryComponent},
@@ -50,10 +52,10 @@ export const routes: Routes = [
 
                 ]
             },
-            {path:'study-materials', component:StudyMaterialsComponent},
+            {path:'study-materials', component:StudyMaterialsComponent, canActivate: [StaffGuard]},
             {path:'', redirectTo:'dashboard', pathMatch:'full'}
         ]
     },
     { path: '', redirectTo: 'login', pathMatch: 'full' },
-    { path: '**', redirectTo: 'login' }
+    
 ];
