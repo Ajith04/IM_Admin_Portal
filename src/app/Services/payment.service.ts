@@ -31,6 +31,10 @@ export class PaymentService {
     return this.http.get<PaymentHistory[]>(this.url + `/get-payment-history/${id}`);
   }
 
+  getNonPaidStudents(){
+    return this.http.get<getStudentForPayment[]>(this.url + '/get-non-paid-students');
+  }
+
 
 
 }

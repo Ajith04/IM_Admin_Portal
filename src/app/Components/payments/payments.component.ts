@@ -13,12 +13,13 @@ import { CalendarModule } from 'primeng/calendar';
 import { DialogModule } from 'primeng/dialog';
 import { InplaceModule } from 'primeng/inplace';
 import { TableModule } from 'primeng/table';
+import { PanelModule } from 'primeng/panel';
 
 
 @Component({
   selector: 'app-payments',
   standalone: true,
-  imports: [CardModule, ButtonModule, CommonModule, ConfirmDialogModule, ToastModule, FormsModule, FloatLabelModule, InputTextModule, CalendarModule, DialogModule, InplaceModule, TableModule],
+  imports: [CardModule, ButtonModule, CommonModule, ConfirmDialogModule, ToastModule, FormsModule, FloatLabelModule, InputTextModule, CalendarModule, DialogModule, InplaceModule, TableModule, PanelModule],
   providers: [ConfirmationService, MessageService],
   templateUrl: './payments.component.html',
   styleUrl: './payments.component.css'
@@ -29,6 +30,8 @@ export class PaymentsComponent implements OnInit{
   searchStudenId: string = '';
   visible: boolean = false;
   studentWithCourses: (getStudentForPayment & { enrolledCourses: EnrolledCourseWithPayment[] }) | undefined;
+
+  allNonPaidStudents: (getStudentForPayment & { enrolledCourses: EnrolledCourseWithPayment[] })[] | undefined;
 
   paymentHistory: PaymentHistory[] = [];
 
@@ -41,6 +44,8 @@ export class PaymentsComponent implements OnInit{
 
   ngOnInit(): void {
     this.getNotRegFeeStudents();
+    this.getNonPaidStudents();
+    console.log(this.allNonPaidStudents)
   }
 
   searchStudent() {
@@ -141,4 +146,30 @@ export class PaymentsComponent implements OnInit{
       this.paymentHistory = data;
     }});
   }
+
+  getNonPaidStudents(): void {
+    this.paymentService.getNonPaidStudents().subscribe({
+      next: (data: getStudentForPayment[]) => {
+        this.allNonPaidStudents = data.map(student => ({
+          ...student,
+          enrolledCourses: student.enrolledCourses?.map(course => ({
+            ...course,
+            singlePayment: {
+              enrollmentId: course.enrollmentId,
+              amount: 0,
+              date: ''
+            }
+          })) || []
+        }));
+      },
+      error: (err) => {
+        
+      },
+      complete: () => {
+        
+      }
+    });
+  }
+  
+    
 }

@@ -132,4 +132,46 @@
       </div>
     </ng-template>
   </div>
+
+
+  <div class="card flex justify-content-center mt-5 flex-column shadow-1 border-round p-3">
+    <h3>Overdue Students</h3>
+    <div *ngIf="allNonPaidStudents">
+    <p-panel [header]="student.studentId + ' - ' + student.firstName"  [toggleable]="true" [collapsed]="true" *ngFor="let student of allNonPaidStudents">
+      <div class="flex flex-column">
+        <div class="flex gap-5 w-full">
+            <span class="w-8rem"><p class="font-semibold">Course Id</p></span>
+            <span class="w-8rem"><p class="font-semibold">Course Name</p></span>
+            <span class="w-8rem"><p class="font-semibold">Total Course Fee</p></span>
+            <span class="w-8rem"><p class="font-semibold">Payable Amount</p></span>
+           
+        </div>
+        
+        <div class="flex gap-5 mb-3 w-full shadow-1 border-round p-2 align-items-center" *ngFor="let course of student?.enrolledCourses">
+            <span class="w-8rem">{{course.courseId}}</span>
+            <span class="w-8rem">{{course.courseName}}</span>
+            <span class="w-8rem">{{course.courseFee | currency : 'Rs. '}}</span>
+            <span class="w-8rem text-red-500">{{course.payableAmount | currency : 'Rs. '}}</span>
+            <span class=""><input type="text" pInputText placeholder="Enter amount..." [(ngModel)]="course.singlePayment.amount"/></span>
+            <span class="">
+                <p-calendar
+                  [showIcon]="true"
+                  [showOnFocus]="false"
+                  inputId="buttondisplay"
+                  placeholder="Select Date"
+                  [(ngModel)]="course.singlePayment.date"
+                />
+              </span>
+              <span class="">
+                <p-button icon="pi pi-plus" severity="success" (onClick)="sendSinglePayment($event, course)"/>
+              </span>
+        </div>
+        </div>
+      
+    </p-panel>
+  </div>
+</div>
+
+
+
 </div>
