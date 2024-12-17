@@ -6,8 +6,7 @@
 /bazel-out
 
 
-# Angular build output
-/dist/
+
 
 # Node
 /node_modules
