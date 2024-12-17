@@ -23,6 +23,7 @@ import { AdminGuard } from './Guards/admin.guard';
 import { StaffGuard } from './Guards/staff.guard';
 
 export const routes: Routes = [
+    {path:'', redirectTo: 'way', pathMatch: 'full'},
     {path:'login', component:LoginComponent},
     {path:'admin/:id', component:AdminLayoutComponent, canActivate: [StaffGuard],
         children:[
