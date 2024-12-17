@@ -3,9 +3,6 @@
       {
         "route": "/browser/*",
         "serve": "/browser/index.html"
-      },
-      {
-        "statusCode": 200
       }
     ]
   }
