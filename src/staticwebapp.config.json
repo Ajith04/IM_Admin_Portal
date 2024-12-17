@@ -1,0 +1,13 @@
+{
+    "routes": [
+      {
+        "route": "/browser/*",
+        "serve": "/browser/index.html"
+      },
+      {
+        "route": "/browser/*",
+        "statusCode": 200
+      }
+    ]
+  }
+  
