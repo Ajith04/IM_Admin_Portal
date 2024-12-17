@@ -75,6 +75,7 @@ export class LoginComponent implements OnInit{
          next: () => {
            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Account Created!' });
            this.signupModelVisible = false;
+           this.getAccountNames();
          },
          error: () => {
            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to create account.' });
