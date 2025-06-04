@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 })
 export class IMService {
 
-  url: string = 'https://itecapi-e9b8g3c0cydhhse8.southeastasia-01.azurewebsites.net/api/IM';
+  url: string = 'https://localhost:7215/api/IM';
 
   constructor(private http: HttpClient) { }
 
@@ -51,11 +51,11 @@ export class IMService {
   }
 
   getAllExpenses(){
-    return this.http.get<Expense[]>(this.url + '/get-all-expenses')
+    return this.http.get<Expense[]>(this.url + '/get-all-expenses');
   }
 
   getRegFee(){
-    return this.http.get<number>(this.url + '/get-reg-fee')
+    return this.http.get<number>(this.url + '/get-reg-fee');
   }
 
   changeRegFee(changeRegFee: ChangeRegFee){
@@ -75,16 +75,16 @@ export class IMService {
   }
 
   getAllFollowup(){
-    return this.http.get<GetFollowUp[]>('https://itecapi-e9b8g3c0cydhhse8.southeastasia-01.azurewebsites.net/api/Student/get-all-followup');
+    return this.http.get<GetFollowUp[]>('https://localhost:7215/api/Student/get-all-followup');
   }
 
   removeFollowup(id: number){
-    return this.http.delete(`https://itecapi-e9b8g3c0cydhhse8.southeastasia-01.azurewebsites.net/api/Student/remove-followup/${id}`)
+    return this.http.delete(`https://localhost:7215/api/Student/remove-followup/${id}`)
   }
 
   updateDescription(id: number, description: string){
     const body = { description };
-    return this.http.patch<string>(`https://itecapi-e9b8g3c0cydhhse8.southeastasia-01.azurewebsites.net/api/Student/update-description/${id}`, body)
+    return this.http.patch<string>(`https://localhost:7215/api/Student/update-description/${id}`, body)
   }
 }
 

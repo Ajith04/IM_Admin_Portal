@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 })
 export class StudyMaterialsService {
 
-  url: string = 'https://itecapi-e9b8g3c0cydhhse8.southeastasia-01.azurewebsites.net/api/SM';
+  url: string = 'https://localhost:7215/api/SM';
 
   constructor(private http: HttpClient) { }
 
