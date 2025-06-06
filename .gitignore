@@ -4,9 +4,6 @@
 /tmp
 /out-tsc
 /bazel-out
-dist/
-build/
-browser/
 
 
 
