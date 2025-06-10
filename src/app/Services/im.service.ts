@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 })
 export class IMService {
 
-  url: string = 'https://kind-dune-08ce8e700.6.azurestaticapps.net/api/IM';
+  url: string = 'itec-api-dnc5ajevdxabbnd3.southeastasia-01.azurewebsites.net/api/IM';
 
   constructor(private http: HttpClient) { }
 
@@ -75,16 +75,16 @@ export class IMService {
   }
 
   getAllFollowup(){
-    return this.http.get<GetFollowUp[]>('https://kind-dune-08ce8e700.6.azurestaticapps.net/api/Student/get-all-followup');
+    return this.http.get<GetFollowUp[]>('itec-api-dnc5ajevdxabbnd3.southeastasia-01.azurewebsites.net/api/Student/get-all-followup');
   }
 
   removeFollowup(id: number){
-    return this.http.delete(`https://kind-dune-08ce8e700.6.azurestaticapps.net/api/Student/remove-followup/${id}`)
+    return this.http.delete(`itec-api-dnc5ajevdxabbnd3.southeastasia-01.azurewebsites.net/api/Student/remove-followup/${id}`)
   }
 
   updateDescription(id: number, description: string){
     const body = { description };
-    return this.http.patch<string>(`https://kind-dune-08ce8e700.6.azurestaticapps.net/api/Student/update-description/${id}`, body)
+    return this.http.patch<string>(`itec-api-dnc5ajevdxabbnd3.southeastasia-01.azurewebsites.net/api/Student/update-description/${id}`, body)
   }
 }
 

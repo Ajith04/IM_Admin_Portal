@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class AuthService {
 
-  private url: string = 'https://kind-dune-08ce8e700.6.azurestaticapps.net/api/AdminAuth';
+  private url: string = 'itec-api-dnc5ajevdxabbnd3.southeastasia-01.azurewebsites.net/api/AdminAuth';
 
   constructor(private http: HttpClient) { }
 
