@@ -1,5 +1,5 @@
 export const environment = {
     production: false,
-    apiUrl: 'itec-api-dnc5ajevdxabbnd3.southeastasia-01.azurewebsites.net'
+    apiUrl: 'https://kind-dune-08ce8e700.6.azurestaticapps.net'
   };
   

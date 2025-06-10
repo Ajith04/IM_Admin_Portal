@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class CourseService {
-  url: string = 'itec-api-dnc5ajevdxabbnd3.southeastasia-01.azurewebsites.net/api/Course';
+  url: string = 'https://kind-dune-08ce8e700.6.azurestaticapps.net/api/Course';
 
   constructor(private http:HttpClient) { }
 

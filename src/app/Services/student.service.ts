@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class StudentService {
 
-  url: string = 'itec-api-dnc5ajevdxabbnd3.southeastasia-01.azurewebsites.net/api/Student';
+  url: string = 'https://kind-dune-08ce8e700.6.azurestaticapps.net/api/Student';
 
   constructor(private http: HttpClient) { }
 
