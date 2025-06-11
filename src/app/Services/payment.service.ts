@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 })
 export class PaymentService {
 
-  private url: string = 'itec-api-dnc5ajevdxabbnd3.southeastasia-01.azurewebsites.net/api/Payment';
+  private url: string = 'https://proud-sky-0a0f23d00.6.azurestaticapps.net/api/Payment';
 
   constructor(private http: HttpClient) { }
 
