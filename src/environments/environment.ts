@@ -1,5 +1,5 @@
 export const environment = {
     production: false,
-    apiUrl: 'https://proud-sky-0a0f23d00.6.azurestaticapps.net'
+    apiUrl: 'https://jolly-flower-068c4bb00.2.azurestaticapps.net'
   };
   

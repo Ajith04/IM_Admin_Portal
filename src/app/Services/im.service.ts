@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 })
 export class IMService {
 
-  url: string = 'https://proud-sky-0a0f23d00.6.azurestaticapps.net/api/IM';
+  url: string = 'https://jolly-flower-068c4bb00.2.azurestaticapps.net/api/IM';
 
   constructor(private http: HttpClient) { }
 
@@ -75,16 +75,16 @@ export class IMService {
   }
 
   getAllFollowup(){
-    return this.http.get<GetFollowUp[]>('https://proud-sky-0a0f23d00.6.azurestaticapps.net/api/Student/get-all-followup');
+    return this.http.get<GetFollowUp[]>('https://jolly-flower-068c4bb00.2.azurestaticapps.net/api/Student/get-all-followup');
   }
 
   removeFollowup(id: number){
-    return this.http.delete(`https://proud-sky-0a0f23d00.6.azurestaticapps.net/api/Student/remove-followup/${id}`)
+    return this.http.delete(`https://jolly-flower-068c4bb00.2.azurestaticapps.net/api/Student/remove-followup/${id}`)
   }
 
   updateDescription(id: number, description: string){
     const body = { description };
-    return this.http.patch<string>(`https://proud-sky-0a0f23d00.6.azurestaticapps.net/api/Student/update-description/${id}`, body)
+    return this.http.patch<string>(`https://jolly-flower-068c4bb00.2.azurestaticapps.net/api/Student/update-description/${id}`, body)
   }
 }
 
