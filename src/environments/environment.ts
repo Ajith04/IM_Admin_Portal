@@ -1,5 +1,5 @@
 export const environment = {
     production: false,
-    apiUrl: 'itecwebapi-agg8h5ancdfahacf.canadacentral-01.azurewebsites.net'
+    apiUrl: 'https://itecapi-a3hhf8enbqgqe7hr.canadacentral-01.azurewebsites.net'
   };
   

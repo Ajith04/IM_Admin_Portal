@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 })
 export class IMService {
 
-  url: string = 'itecwebapi-agg8h5ancdfahacf.canadacentral-01.azurewebsites.net/api/IM';
+  url: string = 'https://itecapi-a3hhf8enbqgqe7hr.canadacentral-01.azurewebsites.net/api/IM';
 
   constructor(private http: HttpClient) { }
 
@@ -75,16 +75,16 @@ export class IMService {
   }
 
   getAllFollowup(){
-    return this.http.get<GetFollowUp[]>('itecwebapi-agg8h5ancdfahacf.canadacentral-01.azurewebsites.net/api/Student/get-all-followup');
+    return this.http.get<GetFollowUp[]>('https://itecapi-a3hhf8enbqgqe7hr.canadacentral-01.azurewebsites.net/api/Student/get-all-followup');
   }
 
   removeFollowup(id: number){
-    return this.http.delete(`itecwebapi-agg8h5ancdfahacf.canadacentral-01.azurewebsites.net/api/Student/remove-followup/${id}`)
+    return this.http.delete(`https://itecapi-a3hhf8enbqgqe7hr.canadacentral-01.azurewebsites.net/api/Student/remove-followup/${id}`)
   }
 
   updateDescription(id: number, description: string){
     const body = { description };
-    return this.http.patch<string>(`itecwebapi-agg8h5ancdfahacf.canadacentral-01.azurewebsites.net/api/Student/update-description/${id}`, body)
+    return this.http.patch<string>(`https://itecapi-a3hhf8enbqgqe7hr.canadacentral-01.azurewebsites.net/api/Student/update-description/${id}`, body)
   }
 }
 
